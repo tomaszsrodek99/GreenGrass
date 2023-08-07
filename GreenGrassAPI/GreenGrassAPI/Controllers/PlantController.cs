@@ -54,11 +54,16 @@ namespace GreenGrassAPI.Controllers
         }
 
         [HttpGet("GetUsersPlants{userId}")]
-        public async Task<ActionResult<IEnumerable<PlantView>>> GetUsersPlants(int userId)
+        public async Task<ActionResult<List<PlantView>>> GetUsersPlants(int userId)
         {
             try
             {
-                return await _plantRepository.GetAllUsersPlants(userId);
+                var plants = await _plantRepository.GetAllUsersPlants(userId);
+                if (!plants.Any())
+                {
+                    return BadRequest("Brak roślin w bazie danych.");
+                }
+                return plants;
             }
             catch (Exception ex)
             {
@@ -67,7 +72,7 @@ namespace GreenGrassAPI.Controllers
         }
 
         [HttpGet("GetPlantById{plantId}")]
-        public async Task<ActionResult<PlantView>> GetPlantById(int plantId)
+        public async Task<ActionResult<PlantDto>> GetPlantById(int plantId)
         {
             try
             {
@@ -79,12 +84,12 @@ namespace GreenGrassAPI.Controllers
             }
         }
 
-        [HttpPost("CreatePlant")]
+        [HttpPost]
+        [Route("CreatePlant")]
         public async Task<ActionResult<Plant>> CreatePlant(PlantDto plantDto)
         {
             try
-            {
-                plantDto = AddImage(plantDto);
+            {             
                 var created = await _plantRepository.CreatePlant(plantDto);
                 return CreatedAtAction("GetPlantById", new { id = plantDto.Id });
             }
@@ -95,10 +100,11 @@ namespace GreenGrassAPI.Controllers
         }
 
         [HttpPut("UpdatePlant")]
-        public async Task<IActionResult> UpdatePlant(PlantDto plantDto)
+        public async Task<IActionResult> UpdatePlant(PlantDto uiPlantDto)
         {
             try
             {
+                var plantDto = _mapper.Map<PlantDto>(uiPlantDto);
                 if (plantDto.ImageFile != null && plantDto.ImageFile.Length > 0)
                 {
                     plantDto = AddImage(plantDto);
@@ -134,7 +140,7 @@ namespace GreenGrassAPI.Controllers
         }
 
         [HttpPost("AddImage")]
-        public PlantDto AddImage(PlantDto plantDto)
+        private PlantDto AddImage(PlantDto plantDto)
         {
             // Utwórz ścieżkę docelową dla zapisu pliku
             string webRootPath = _webHostEnvironment.WebRootPath;

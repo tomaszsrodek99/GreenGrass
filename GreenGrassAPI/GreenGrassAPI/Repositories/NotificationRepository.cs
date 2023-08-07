@@ -56,8 +56,6 @@ namespace GreenGrassAPI.Repositories
                 plantView.NextFertilizingDate = notificationDto.NextFertilizingDate;
                 plantView.NextWateringDate = notificationDto.NextWateringDate;
                 plantView.LastFertilizingDate = notificationDto.LastFertilizingDate;
-                plantView.DaysUntilWatering = (int)(notificationDto.NextWateringDate.Date - DateTime.Now.Date).TotalDays;
-                plantView.DaysUntilFertilizing = (int)(notificationDto.NextFertilizingDate.Date - DateTime.Now.Date).TotalDays;
                 notificationDto.Plant = plantView;
             }
             return notificationsDto;
@@ -81,8 +79,6 @@ namespace GreenGrassAPI.Repositories
             plantView.NextFertilizingDate = notification.NextFertilizingDate;
             plantView.NextWateringDate = notification.NextWateringDate;
             plantView.LastFertilizingDate = notification.LastFertilizingDate;
-            plantView.DaysUntilWatering = (int)(notification.NextWateringDate.Date - DateTime.Now.Date).TotalDays;
-            plantView.DaysUntilFertilizing = (int)(notification.NextFertilizingDate.Date - DateTime.Now.Date).TotalDays;
             notification.Plant = plantView;
             return notification;
         }

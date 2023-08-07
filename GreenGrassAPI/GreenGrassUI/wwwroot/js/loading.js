@@ -9,17 +9,15 @@ function hideLoadingIcon() {
     $('body').removeClass('blur-overlay-visible');
 }
 
-let isFirstSubmit = true;
-function loading(time) {
-    if (isFirstSubmit) {
-        isFirstSubmit = false;
-        loading(100);
-    }
-    else {
+let shouldShowLoading = false; 
+
+function loading() {
+    if (shouldShowLoading) {
         showLoadingIcon();
-        setTimeout(function () {
+        setTimeout(async function () {
             hideLoadingIcon();
-        }, time);
+        }, 9999);
+
         const allSpans = document.getElementsByTagName("span");
         for (const span of allSpans) {
             if (span.classList.contains("field-validation-error")) {
@@ -30,6 +28,23 @@ function loading(time) {
     }
 }
 
+window.addEventListener('beforeunload', () => {
+    shouldShowLoading = true;   
+    console.log("beforeunload" + shouldShowLoading);
+    loading();
+});
+
+document.addEventListener('ajaxStart', function () {
+    shouldShowLoading = true; 
+    console.log("ajaxStart" + shouldShowLoading);
+    loading();
+});
+
+document.addEventListener('ajaxStop', function () {
+    shouldShowLoading = false; 
+    console.log("ajaxStop" + shouldShowLoading);
+    loading();
+});
 
 
 
@@ -46,27 +61,7 @@ window.onload = function () {
     initializeNotificationList();
     checkPlantNotifications();
 };
-function searchPlantByName() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("searchTable");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[1];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
-}
-function goBack() {
-    history.back();
-}
+
 function checkPlantNotifications() {
     $.ajax({
         url: '/Plant/CheckNotifications',

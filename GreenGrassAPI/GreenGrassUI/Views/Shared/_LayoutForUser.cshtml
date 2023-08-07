@@ -15,11 +15,28 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <h1 class="navbar-brand"><i class="fa-solid fa-leaf"></i>GreenGrass</h1>
+            <div class="container d-flex align-items-center">
+                <a class="nav-link no-link-style brand" asp-controller="User" asp-action="Index">
+                    <i class="fa-solid fa-leaf"></i>GreenGrass
+                </a>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item d-flex align-items-center">
+                        <div>
+                            <a id="notification-link nav-link brand">
+                                <i class="fa-solid fa-bell"></i>Powiadomienia
+                            </a>
+                            <span id="notification-count" class="badge badge-danger"></span>
+                        </div>
+                        <ul id="notification-list" style="display: none;"></ul>
+                    </li>
+                </ul>
+                <a class="nav-link no-link-style brand" asp-controller="User" asp-action="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>Wyloguj
+                </a>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -33,6 +50,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/loading.js" asp-append-version="true"></script>
+    <script src="~/js/user.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GreenGrassAPI.Dtos;
 using System.Reflection;
 
 namespace GreenGrassAPI.Configuration
@@ -7,11 +8,10 @@ namespace GreenGrassAPI.Configuration
     {
         public MapperConfig()
         {
-            CreateMap<Models.Notification, Dtos.NotificationDto>().ReverseMap();
-            CreateMap<Models.Plant, Dtos.PlantDto>().ReverseMap();
-            CreateMap<Models.Plant, Dtos.PlantView>().ReverseMap();
-            CreateMap<Dtos.PlantDto, Dtos.PlantView>().ReverseMap();
-            CreateMap<Models.User, Dtos.UserDto>().ReverseMap();
+            CreateMap<Models.Notification, NotificationDto>().ReverseMap();
+            CreateMap<Models.Plant, PlantDto>().ReverseMap();
+            CreateMap<Models.Plant, PlantView>().ReverseMap();
+            CreateMap<Models.User, UserDto>().ReverseMap();
         }
     }
 }

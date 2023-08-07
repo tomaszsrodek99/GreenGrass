@@ -17,7 +17,7 @@ namespace GreenGrassAPI.Models
 
         public async Task Invoke(HttpContext context)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = context.Request.Cookies["JWTToken"];
 
             if (token != null)
             {

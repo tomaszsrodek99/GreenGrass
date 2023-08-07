@@ -8,6 +8,6 @@ namespace GreenGrassAPI.Interfaces
         Task<List<PlantView>> GetAllPlants();
         Task<List<PlantView>> GetAllUsersPlants(int userId);
         Task<PlantView> CreatePlant(PlantDto plantDto);
-        Task<PlantView> GetPlantById(int id);
+        Task<PlantDto> GetPlantById(int id);
     }
 }

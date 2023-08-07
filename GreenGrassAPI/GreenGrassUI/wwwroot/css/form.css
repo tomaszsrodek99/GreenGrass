@@ -1,0 +1,66 @@
+﻿.urlLink {
+    margin-left: 50%;
+    margin-bottom: 5px;
+}
+
+.btn-back {
+    margin-right: 15px;
+}
+
+.my-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.form-control:focus {
+    border-color: #ced4da;
+    box-shadow: 5px 5px 30px rgba(0,0,0,0.2);
+}
+
+.form-floating:focus-within {
+    z-index: 2;
+}
+
+    .my-form .form-group {
+        margin-bottom: 15px;
+    }
+
+    .my-form label {
+        font-weight: bold;
+    }
+
+    .my-form input[type="number"] {
+        width: 70px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        margin: auto;
+    }
+
+    .my-form input[type="text"],
+    .my-form select {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+    }
+
+    .my-form button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-weight: bold;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        .my-form button[type="submit"]:hover {
+            background-color: #0069d9;
+        }

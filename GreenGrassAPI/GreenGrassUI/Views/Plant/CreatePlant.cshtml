@@ -1,0 +1,140 @@
+﻿@model GreenGrassAPI.Dtos.PlantDto
+@{
+    ViewData["Title"] = "Dodaj roślinę";
+}
+
+<div class="text-center">
+    <h2>Dodaj roślinę</h2>
+    <form asp-action="AddPlant" asp-controller="Plant" method="post" class="my-form" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" type="text"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateAdded" class="control-label"></label>
+            <input type="date" asp-for="DateAdded" class="form-control" />
+            <span asp-validation-for="DateAdded" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="3" cols="50"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CareInstructions" class="control-label"></label>
+            <textarea asp-for="CareInstructions" class="form-control" rows="3" cols="50"></textarea>
+            <span asp-validation-for="CareInstructions" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label asp-for="TemperatureRangeMin" class="control-label"></label>
+                    <input asp-for="TemperatureRangeMin" type="number" class="form-control" type="number" min="1" max="60"/>
+                    <span asp-validation-for="TemperatureRangeMin" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="TemperatureRangeMax" class="control-label"></label>
+                    <input asp-for="TemperatureRangeMax" type="number" class="form-control" type="number" min="1" max="60"/>
+                    <span asp-validation-for="TemperatureRangeMax" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label asp-for="HumidityRangeMin" class="control-label"></label>
+                    <input asp-for="HumidityRangeMin" type="number" class="form-control" type="number" min="1" max="100"/>
+                    <span asp-validation-for="HumidityRangeMin" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="HumidityRangeMax" class="control-label"></label>
+                    <input asp-for="HumidityRangeMax" type="number" class="form-control" type="number" min="1" max="100"/>
+                    <span asp-validation-for="HumidityRangeMax" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SoilType" class="control-label"></label>
+            <Input asp-for="SoilType" class="form-control" type="text">
+            <span asp-validation-for="SoilType" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Prunning" class="control-label"></label>
+            <Input asp-for="Prunning" class="form-control" type="text">
+            <span asp-validation-for="Prunning" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Lighting" class="control-label">Oświetlenie</label>
+            <select asp-for="Lighting" class="form-control">
+                <option value="">-Wybierz oświetlenie-</option>
+                @foreach (var lightingType in Enum.GetValues(typeof(GreenGrassAPI.Dtos.LightingType)))
+                {
+                    <option value="@lightingType">@lightingType</option>
+                }
+            </select>
+            <span asp-validation-for="Lighting" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Bursting" class="control-label"></label>
+            <Input asp-for="Bursting" class="form-control" type="text">
+            <span asp-validation-for="Bursting" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PottedSuggestions" class="control-label"></label>
+            <textarea asp-for="PottedSuggestions" class="form-control" rows="2" cols="50"></textarea>
+            <span asp-validation-for="PottedSuggestions" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="WateringFrequency" class="control-label"></label>
+            <input asp-for="WateringFrequency" class="form-control" type="number" min="1"/>
+            <span asp-validation-for="WateringFrequency" class="text-danger"></span>
+        </div>
+   
+
+        <div class="form-group">
+            <label asp-for="FertilizingFrequency" class="control-label"></label>
+            <input type="number" asp-for="FertilizingFrequency" class="form-control" type="number" min="1" />
+            <span asp-validation-for="FertilizingFrequency" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RepottingFrequency" class="control-label"></label>
+            <input type="number" asp-for="RepottingFrequency" class="form-control" type="number" min="1" />
+            <span asp-validation-for="RepottingFrequency" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ImageFile" class="control-label">Zdjęcie rośliny</label>
+            <input type="file" class="form-control" asp-for="ImageFile" />
+            <span asp-validation-for="ImageFile" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <div class="btn-group">
+                <button style="margin-right: 15px" type="button" class="btn btn-secondary" onclick="goBack()">Wstecz</button>
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

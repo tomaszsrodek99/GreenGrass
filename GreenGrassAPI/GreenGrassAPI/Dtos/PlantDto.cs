@@ -1,8 +1,11 @@
 ﻿using GreenGrassAPI.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace GreenGrassAPI.Dtos
 {
@@ -12,7 +15,6 @@ namespace GreenGrassAPI.Dtos
 
         [Required(ErrorMessage = "Pole jest wymagane."), MinLength(2, ErrorMessage = "Minmalna ilość znaków to 2"), MaxLength(128, ErrorMessage = "Maksymalna długość to 128 znaków.")]
         [Display(Name = "Nazwa")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Tylko litery są dozwolone.")]
         public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Pole jest wymagane.")]
@@ -21,12 +23,12 @@ namespace GreenGrassAPI.Dtos
         public DateTime DateAdded { get; set; }
 
         [Display(Name = "Zdjęcie")]
-        public string ImageUrl { get; set; } = string.Empty;
-
+        public string? ImageUrl { get; set; }
+        [JsonIgnore]
         public IFormFile? ImageFile { get; set; }
 
         [Display(Name = "Opis")]
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
         [Display(Name = "Porady")]
         public string? CareInstructions { get; set; }
@@ -43,21 +45,17 @@ namespace GreenGrassAPI.Dtos
         [Required(ErrorMessage = "Pole jest wymagane.")]
         [Display(Name = "Zakres wilgotności max.")]
         public int HumidityRangeMax { get; set; }
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Tylko litery są dozwolone.")]
-        [Display(Name = "Podłoże"), MaxLength(128, ErrorMessage = "Maksymalna długość to 128 znaków.")]
-        public string SoilType { get; set; } = string.Empty;
+        [Display(Name = "Podłoże")]
+        public string? SoilType { get; set; }
         [Display(Name = "Przycinanie")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Tylko litery są dozwolone."), MaxLength(128, ErrorMessage = "Maksymalna długość to 128 znaków.")]
-        public string Prunning { get; set; } = string.Empty;
+        public string? Prunning { get; set; }
         [Display(Name = "Oświetlenie")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Tylko litery są dozwolone."), MaxLength(128, ErrorMessage = "Maksymalna długość to 128 znaków.")]
+        [Required(ErrorMessage = "Pole jest wymagane.")]
         public string Lighting { get; set; } = string.Empty;
         [Display(Name = "Rozsadzanie")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Tylko litery są dozwolone."), MaxLength(128, ErrorMessage = "Maksymalna długość to 128 znaków.")]
-        public string Bursting { get; set; } = string.Empty;
+        public string? Bursting { get; set; }
         [Display(Name = "Sugestie doniczkowe")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Tylko litery są dozwolone."), MaxLength(128, ErrorMessage = "Maksymalna długość to 128 znaków.")]
-        public string PottedSuggestions { get; set; } = string.Empty;
+        public string? PottedSuggestions { get; set; }
         //NOTIFICATION
         [Required(ErrorMessage = "Pole jest wymagane.")]
         [Display(Name = "Częstotliwość podlewania (dni)")]
@@ -71,18 +69,18 @@ namespace GreenGrassAPI.Dtos
         //Dependencies
         public int UserId { get; set; }
         //WALIDACJE
-        public static ValidationResult ValidateTemperatureRange(Plant plant)
+        public static ValidationResult ValidateTemperatureRange(PlantDto plant)
         {
-            if (plant.TemperatureRangeMax <= plant.TemperatureRangeMin)
+            if (plant.TemperatureRangeMax >= plant.TemperatureRangeMin)
             {
                 return new ValidationResult("Górna granica zakresu temperatury musi być większa od dolnej granicy.", new[] { "TemperatureRangeMax" });
             }
             return ValidationResult.Success;
         }
 
-        public static ValidationResult ValidateHumidityRange(Plant plant)
+        public static ValidationResult ValidateHumidityRange(PlantDto plant)
         {
-            if (plant.HumidityRangeMax <= plant.HumidityRangeMin)
+            if (plant.HumidityRangeMax >= plant.HumidityRangeMin)
             {
                 return new ValidationResult("Górna granica zakresu wilgotności musi być większa od dolnej granicy.", new[] { "HumidityRangeMax" });
             }
@@ -92,15 +90,15 @@ namespace GreenGrassAPI.Dtos
     public enum LightingType
     {
         [Display(Name = "Pełne słońce")]
-        FullSun,
+        Słoneczne,
 
         [Display(Name = "Częściowe słońce")]
-        PartialSun,
+        Rozproszone,
 
         [Display(Name = "Częściowy cień")]
-        PartialShade,
+        Zacienione,
 
         [Display(Name = "Pełen cień")]
-        FullShade
+        Cień
     }
 }

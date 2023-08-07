@@ -1,0 +1,118 @@
+﻿@model IEnumerable<GreenGrassAPI.Dtos.PlantView>
+@namespace GreenGrassUI.Views.Plant
+@{
+    ViewData["Title"] = "Moje rośliny";
+    var number = 1;
+}
+
+<h1 class="text-center">Moje rośliny</h1>
+
+<div class="input-group">
+    <span class="input-group-text">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </span>
+    <input class="form-control search-bar" type="text" id="myInput" onkeyup="searchPlantByName()" placeholder="Wyszukaj..">
+</div>
+<br />
+<a href="@Url.Action("CreateView", "Plant")" class="btn btn-primary" style="margin-bottom: 15px;">Dodaj nową roślinę</a>
+@if (Model.Any())
+{
+    <table id="searchTable" class="table sortable table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th></th>
+                <th>
+                    Nazwa
+                </th>
+                <th></th>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Temperatura °C
+                </th>
+                <th>
+                    Wilgotność %
+                </th>
+                <th>
+                    Podłoże
+                </th>
+                <th>
+                    Oświetlenie
+                </th>
+                <th>
+                    Podlewanie
+                </th>
+                <th>
+                    Nawożenie
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(number).</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@Url.Content(item.ImageUrl)" class="image-thumbnail" />
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateAdded)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TemperatureRangeMin)°C - @Html.DisplayFor(modelItem => item.TemperatureRangeMax)°C
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HumidityRangeMin)% - @Html.DisplayFor(modelItem => item.HumidityRangeMax)%
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SoilType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Lighting)
+                    </td>
+                    <td>
+                        Podlewać co: @Html.DisplayFor(modelItem => item.WateringFrequency) dni.
+                        <br />
+                        @Html.DisplayFor(modelItem => item.DaysUntilWateringInfo)
+                    </td>
+                    <td>
+                        Nawozić co: @Html.DisplayFor(modelItem => item.FertilizingFrequency)dni.
+                        <br />
+                        @Html.DisplayFor(modelItem => item.DaysUntilFertilizingInfo)
+                    </td>                  
+                    <td>
+                        <div class="btn-group" role="group">
+                            <div class="btn-group" role="group">
+                                @Html.ActionLink("Szczegóły", "Details", "Plant", new { id = item.Id }, new { @class = "btn btn-warning", style = "margin-right: 5px;" })
+                                @Html.ActionLink("Edytuj", "Update", "Plant", new { id = item.Id }, new { @class = "btn btn-primary", style = "margin-right: 5px;" })
+                                @Html.ActionLink("Podlej", "UpdateWateringStatus", "Plant", new { id = item.Id }, new { @class = "btn btn-primary", style = "margin-right: 5px; background-color: green;" })
+                                @Html.ActionLink("Nawieź", "UpdateFertilizingStatus", "Plant", new { id = item.Id }, new { @class = "btn btn-primary", style = "margin-right: 5px; background-color: saddlebrown;" })
+                                @Html.ActionLink("Usuń", "DeletePlant", "Plant", new { id = item.Id }, new { @class = "btn btn-danger", onclick = "return confirm('Czy na pewno chcesz usunąć roślinę?');", style = "margin-right: 5px;" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                number++;
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Brak roślin do wyświetlenia.</p>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

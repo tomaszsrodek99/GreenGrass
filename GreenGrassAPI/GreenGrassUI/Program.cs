@@ -1,5 +1,7 @@
+using GreenGrassAPI.Configuration;
 using GreenGrassAPI.Context;
 using GreenGrassAPI.Interfaces;
+using GreenGrassAPI.Models;
 using GreenGrassAPI.Repositories;
 using GreenGrassUI.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -28,6 +30,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     };
                 });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme) 
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "JWTToken";
+        options.LoginPath = "/User/LoginView";
+        options.LogoutPath = "/User/Logout"; 
+    });
+
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     options.CheckConsentNeeded = context => false;
@@ -43,6 +53,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

@@ -151,7 +151,7 @@ namespace GreenGrassAPI.Controllers
                 }
 
                 string token = _repository.GenerateToken(user);
-                var responseDto = new UserLoginResponseDto { Token = token, UserId = user.Id };
+                var responseDto = new UserLoginResponseDto() { Token = token, UserId = user.Id };
                 return Ok(responseDto);
             }
             catch (Exception ex)

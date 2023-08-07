@@ -1,6 +1,8 @@
 ﻿using GreenGrassAPI.Dtos;
 using GreenGrassAPI.Interfaces;
 using GreenGrassUI.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace GreenGrassUI.Controllers
 {
@@ -43,7 +46,7 @@ namespace GreenGrassUI.Controllers
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.UtcNow.AddMinutes(90)
+                    Expires = DateTime.UtcNow.AddMinutes(60)
                 };
                 Response.Cookies.Append("JWTToken", token, jwtCookie);
 
@@ -52,7 +55,7 @@ namespace GreenGrassUI.Controllers
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.UtcNow.AddMinutes(90)
+                    Expires = DateTime.UtcNow.AddMinutes(60)
                 };
                 Response.Cookies.Append("UserId", userId, userIdCookie);
                 return RedirectToAction("Index");
@@ -107,6 +110,17 @@ namespace GreenGrassUI.Controllers
             ViewBag.JWTToken = jwtToken;
             ViewBag.UserId = userId;
             return View("Index");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); 
+
+            Response.Cookies.Delete("JWTToken");
+            Response.Cookies.Delete("UserId");
+
+            return RedirectToAction("LoginView");
         }
     }
 }
