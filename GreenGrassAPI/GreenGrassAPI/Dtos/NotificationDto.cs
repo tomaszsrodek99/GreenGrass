@@ -11,6 +11,13 @@ namespace GreenGrassAPI.Dtos
 {
     public class NotificationDto
     {
+        public NotificationDto()
+        {
+            LastFertilizingDate = DateTime.Now;
+            NextWateringDate = DateTime.Now;
+            LastWateringDate = DateTime.Now;
+            NextFertilizingDate = DateTime.Now;
+        }
         public int Id { get; set; }
         [Required(ErrorMessage = "Pole jest wymagane.")]
         public int PlantId { get; set; }
@@ -18,15 +25,16 @@ namespace GreenGrassAPI.Dtos
         [Display(Name = "Poprzednio podlano")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime LastWateringDate { get; set; }
-        [Display(Name = "Należy podlać")]
+        [Display(Name = "Należy podlać dnia")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [Required(ErrorMessage = "Pole jest wymagane.")]
         public DateTime NextWateringDate { get; set; }
         [Display(Name = "Poprzednio nawożono")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime LastFertilizingDate { get; set; }
-        [Display(Name = "Należy nawieżć")]
+        [Display(Name = "Należy nawieżć dnia")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [Required(ErrorMessage = "Pole jest wymagane.")]
         public DateTime NextFertilizingDate { get; set; }
     }
-
 }

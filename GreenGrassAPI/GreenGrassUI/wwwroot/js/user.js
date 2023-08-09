@@ -1,6 +1,6 @@
 function searchPlantByName() {
     var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInput");
+    input = document.getElementById("searchInput");
     filter = input.value.toUpperCase();
     table = document.getElementById("searchTable");
     tr = table.getElementsByTagName("tr");
@@ -29,4 +29,9 @@ function getUserIdFromCookie() {
 
 function goBack() {
     history.back();
+}
+
+function hideModal() {
+    var notificationContainer = document.querySelector('.notification-overlay');
+    notificationContainer.style.display = 'none';
 }

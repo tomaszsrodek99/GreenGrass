@@ -4,6 +4,7 @@ using GreenGrassAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Json;
 using System.Numerics;
 
 namespace GreenGrassUI.Controllers
@@ -55,23 +56,18 @@ namespace GreenGrassUI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPlant(PlantDto plantDto)
         {
-            plantDto.UserId = int.Parse(Request.Cookies["UserId"]);
             try
             {
-                plantDto = AddImage(plantDto);
+                if (plantDto.ImageFile != null)
+                    plantDto = AddImage(plantDto);
+
                 HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/Plant/CreatePlant", plantDto);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var createdPlant = await response.Content.ReadFromJsonAsync<Plant>();
                     return RedirectToAction("GetPlants");
                 }
-                else
-                {
-                    var errorMessage = await response.Content.ReadAsStringAsync();
-                    ModelState.AddModelError("Name", errorMessage);
-                    return View("CreatePlant", plantDto);
-                }
+                return View("CreatePlant", plantDto);
             }
             catch (Exception ex)
             {
@@ -100,6 +96,79 @@ namespace GreenGrassUI.Controllers
 
             plantDto.ImageUrl = Path.Combine("/PlantImages", fileName);
             return plantDto;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> UpdateView(int id)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Plant/GetPlantById{id}");
+            var plantDto = await response.Content.ReadFromJsonAsync<PlantDto>();
+            return View("CreatePlant", plantDto);
+        }
+
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> EditPlant(PlantDto plantDto)
+        {
+            try
+            {
+                if (plantDto.ImageFile != null)
+                    plantDto = AddImage(plantDto);
+                else
+                {
+                    HttpResponseMessage plant = await _httpClient.GetAsync($"api/Plant/GetPlantById{plantDto.Id}");
+                    var currentPlant = await plant.Content.ReadFromJsonAsync<PlantDto>();
+                    plantDto.ImageUrl = currentPlant.ImageUrl;
+                }
+
+                HttpResponseMessage response = await _httpClient.PutAsJsonAsync("api/Plant/UpdatePlant", plantDto);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("GetPlants");
+                }
+                return View("CreatePlant", plantDto);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> RemovePlant(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.DeleteAsync($"api/Plant/DeletePlant{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("GetPlants");
+                }
+                else
+                {
+                    throw new Exception("Błąd serwera. Spróbuj ponownie później.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> DetailsOfPlant(int id)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Plant/GetPlantById{id}");
+            var plantDto = await response.Content.ReadFromJsonAsync<PlantDto>();
+            ViewData["PlantName"] = plantDto.Name;
+            return View("PlantDetails", plantDto);
         }
     }
 }

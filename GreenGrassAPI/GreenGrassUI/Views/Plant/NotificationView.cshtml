@@ -1,0 +1,39 @@
+﻿@model GreenGrassAPI.Dtos.NotificationDto
+
+<h2 id="notificationPlantName">Powiadomienie</h2>
+<form asp-action="AddNotification" asp-controller="Notification" method="post" class="my-form">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.AntiForgeryToken()
+
+    <input id="notificationDtoPlantId" asp-for="PlantId" hidden />
+    <input type="date" asp-for="LastWateringDate" hidden />
+    <input type="date" asp-for="LastFertilizingDate" hidden />
+
+    <div class="form-group">
+        <label asp-for="NextWateringDate" class="control-label"></label>
+        <input type="date" asp-for="NextWateringDate" class="form-control" min="@DateTime.Today.ToString("yyyy-MM-dd")"
+               data-val="true" data-val-futuredate="Data nie może być wcześniejsza niż dzisiejsza." />
+        <span asp-validation-for="NextWateringDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NextFertilizingDate" class="control-label"></label>
+        <input type="date" asp-for="NextFertilizingDate" class="form-control" min="@DateTime.Today.ToString("yyyy-MM-dd")"
+               data-val="true" data-val-futuredate="Data nie może być wcześniejsza niż dzisiejsza." />
+        <span asp-validation-for="NextFertilizingDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <div class="btn-group">
+            <button id="closeNotificationBtn" type="button" class="btn btn-secondary my-btn">Wstecz</button>
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

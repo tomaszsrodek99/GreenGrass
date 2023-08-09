@@ -6,12 +6,11 @@
 }
 
 <h1 class="text-center">Moje rośliny</h1>
-
 <div class="input-group">
     <span class="input-group-text">
         <i class="fa-solid fa-magnifying-glass"></i>
     </span>
-    <input class="form-control search-bar" type="text" id="myInput" onkeyup="searchPlantByName()" placeholder="Wyszukaj..">
+    <input class="form-control search-bar" type="text" id="searchInput" onkeyup="searchPlantByName()" placeholder="Wyszukaj..">
 </div>
 <br />
 <a href="@Url.Action("CreateView", "Plant")" class="btn btn-primary" style="margin-bottom: 15px;">Dodaj nową roślinę</a>
@@ -80,23 +79,38 @@
                         @Html.DisplayFor(modelItem => item.Lighting)
                     </td>
                     <td>
-                        Podlewać co: @Html.DisplayFor(modelItem => item.WateringFrequency) dni.
-                        <br />
+                        @if (item.NotificationId == null)
+                        {
+                            <p>Podlewać co: @(Html.DisplayFor(modelItem => item.WateringFrequency)) dni.</p>
+                        } else {
                         @Html.DisplayFor(modelItem => item.DaysUntilWateringInfo)
+                        }
                     </td>
                     <td>
-                        Nawozić co: @Html.DisplayFor(modelItem => item.FertilizingFrequency)dni.
-                        <br />
-                        @Html.DisplayFor(modelItem => item.DaysUntilFertilizingInfo)
+                        @if (item.NotificationId == null)
+                        {
+                            <p>Nawozić co: @(Html.DisplayFor(modelItem => item.FertilizingFrequency)) dni.</p>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.DaysUntilFertilizingInfo)
+                        }                      
                     </td>                  
                     <td>
                         <div class="btn-group" role="group">
                             <div class="btn-group" role="group">
-                                @Html.ActionLink("Szczegóły", "Details", "Plant", new { id = item.Id }, new { @class = "btn btn-warning", style = "margin-right: 5px;" })
-                                @Html.ActionLink("Edytuj", "Update", "Plant", new { id = item.Id }, new { @class = "btn btn-primary", style = "margin-right: 5px;" })
-                                @Html.ActionLink("Podlej", "UpdateWateringStatus", "Plant", new { id = item.Id }, new { @class = "btn btn-primary", style = "margin-right: 5px; background-color: green;" })
-                                @Html.ActionLink("Nawieź", "UpdateFertilizingStatus", "Plant", new { id = item.Id }, new { @class = "btn btn-primary", style = "margin-right: 5px; background-color: saddlebrown;" })
-                                @Html.ActionLink("Usuń", "DeletePlant", "Plant", new { id = item.Id }, new { @class = "btn btn-danger", onclick = "return confirm('Czy na pewno chcesz usunąć roślinę?');", style = "margin-right: 5px;" })
+                                @Html.ActionLink("Szczegóły", "DetailsOfPlant", "Plant", new { id = item.Id }, new { @class = "btn btn-warning my-btn" })
+                                @Html.ActionLink("Edytuj", "UpdateView", "Plant", new { id = item.Id }, new { @class = "btn btn-primary my-btn", style = "background-color: green;" })
+                                @if (item.NotificationId != null)
+                                {
+                                    @Html.ActionLink("Podlej", "UpdateWatering", "Notification", new { id = item.Id }, new { @class = "btn btn-primary my-btn" })
+                                    @Html.ActionLink("Nawieź", "UpdateFertilizing", "Notification", new { id = item.Id }, new { @class = "btn btn-primary my-btn", style = "background-color: saddlebrown;" })
+                                    <a data-id="@item.Id" data-name="@item.Name" class="btn btn-primary my-btn show-notification-btn">Edytuj powiadomienie</a>
+                                } else
+                                {
+                                    <a data-id="@item.Id" data-name="@item.Name" class="btn btn-primary my-btn show-notification-btn">Dodaj powiadomienie</a>
+                                }
+                                @Html.ActionLink("Usuń", "RemovePlant", "Plant", new { id = item.Id }, new { @class = "btn btn-danger", onclick = "return confirm('Czy na pewno chcesz usunąć roślinę?');" })
                             </div>
                         </div>
                     </td>
@@ -105,6 +119,14 @@
             }
         </tbody>
     </table>
+    <div id="notificationOverlay" class="notification-overlay" style="display: none;">
+        <div class="text-center notification-content">
+            <div id="notificationContainer">
+                @await Html.PartialAsync("NotificationView", new GreenGrassAPI.Dtos.NotificationDto())
+            </div>
+        </div>
+    </div>
+
 }
 else
 {
@@ -112,7 +134,21 @@ else
 }
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        $(document).ready(function () {
+            $(".show-notification-btn").click(function () {
+                var plantId = $(this).data("id");
+                var plantName = $(this).data("name");
+
+                $("#notificationOverlay").show();
+                $("#notificationPlantName").text("Powiadomienie - " + plantName);
+                $("#notificationDtoPlantId").val(plantId);
+            });
+
+            $("#closeNotificationBtn").click(function () {
+                $("#notificationOverlay").hide();
+            });
+        });
+    </script>
+
 }

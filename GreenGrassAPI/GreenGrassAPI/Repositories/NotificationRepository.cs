@@ -16,30 +16,25 @@ namespace GreenGrassAPI.Repositories
             _mapper = mapper;
             _context = context;
         }
-        public async Task UpdateWateringStatusAsync(int plantId, DateTime currentDate)
+        public async Task UpdateWateringStatusAsync(int plantId)
         {
             var notification = await _context.Notifications.FirstOrDefaultAsync(n => n.PlantId == plantId);
-            var plant = await _context.Plants.FirstOrDefaultAsync(n => n.Id == plantId);
-            if (notification != null)
-            {
-                notification.LastWateringDate = currentDate;
-                notification.NextWateringDate = currentDate.AddDays((double)plant.WateringFrequency);
-            }
+            var period = (notification.NextWateringDate - notification.LastWateringDate).TotalDays;
 
+            notification.NextWateringDate = DateTime.Now.AddDays(period);
+            notification.LastWateringDate = DateTime.Now;
+                
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateFertilizingStatusAsync(int plantId, DateTime currentDate)
+        public async Task UpdateFertilizingStatusAsync(int plantId)
         {
-            var notification = await _context.Notifications
-                .FirstOrDefaultAsync(n => n.PlantId == plantId);
-            var plant = await _context.Plants.FirstOrDefaultAsync(n => n.Id == plantId);
-            if (notification != null)
-            {
-                notification.LastFertilizingDate = currentDate;
-                notification.NextFertilizingDate = currentDate.AddDays((double)plant.FertilizingFrequency);
-            }
+            var notification = await _context.Notifications.FirstOrDefaultAsync(n => n.PlantId == plantId);
+            var period = (notification.NextFertilizingDate - notification.LastFertilizingDate).TotalDays;
 
+            notification.NextFertilizingDate = DateTime.Now.AddDays(period);
+            notification.LastFertilizingDate = DateTime.Now;
+              
             await _context.SaveChangesAsync();
         }
 

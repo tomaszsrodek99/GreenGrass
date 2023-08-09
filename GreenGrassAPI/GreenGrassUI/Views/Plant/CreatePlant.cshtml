@@ -1,14 +1,19 @@
 ﻿@model GreenGrassAPI.Dtos.PlantDto
 @{
-    ViewData["Title"] = "Dodaj roślinę";
+    ViewData["Title"] = "My plant";
 }
 
 <div class="text-center">
-    <h2>Dodaj roślinę</h2>
-    <form asp-action="AddPlant" asp-controller="Plant" method="post" class="my-form" enctype="multipart/form-data">
+    <h2>@((ViewContext.RouteData.Values["action"] as string == "UpdateView") ? "Edytuj " : "Dodaj ") roślinę</h2>
+    <form asp-action="@((ViewContext.RouteData.Values["action"] as string == "UpdateView") ? "EditPlant" : "AddPlant")" asp-controller="Plant" method="post" class="my-form" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @Html.AntiForgeryToken()
 
+        @if (ViewContext.RouteData.Values["action"] as string == "UpdateView") {
+        <input asp-for="UserId" hidden />
+        <input asp-for="Id" hidden />
+        }
+        
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>
             <input asp-for="Name" class="form-control" type="text"/>
@@ -127,7 +132,7 @@
         <div class="form-group">
             <div class="btn-group">
                 <button style="margin-right: 15px" type="button" class="btn btn-secondary" onclick="goBack()">Wstecz</button>
-                <button type="submit" class="btn btn-primary">Dodaj</button>
+                <button type="submit" class="btn btn-primary">Zapisz</button>
             </div>
         </div>
     </form>

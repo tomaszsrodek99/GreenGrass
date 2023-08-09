@@ -21,14 +21,12 @@ namespace GreenGrassAPI.Controllers
     [ApiController]
     public class PlantController : Controller
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IPlantRepository _plantRepository;
         private readonly IMapper _mapper;
         private readonly INotificationRepository _notificationRepository;
 
-        public PlantController(IPlantRepository plantRepository, IWebHostEnvironment webHostEnvironment, INotificationRepository notificationRepository, IMapper mapper)
+        public PlantController(IPlantRepository plantRepository, INotificationRepository notificationRepository, IMapper mapper)
         {
-            _webHostEnvironment = webHostEnvironment;
             _plantRepository = plantRepository;
             _notificationRepository = notificationRepository;
             _mapper = mapper;
@@ -91,7 +89,7 @@ namespace GreenGrassAPI.Controllers
             try
             {             
                 var created = await _plantRepository.CreatePlant(plantDto);
-                return CreatedAtAction("GetPlantById", new { id = plantDto.Id });
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -100,24 +98,13 @@ namespace GreenGrassAPI.Controllers
         }
 
         [HttpPut("UpdatePlant")]
-        public async Task<IActionResult> UpdatePlant(PlantDto uiPlantDto)
+        public async Task<IActionResult> UpdatePlant(PlantDto plantDto)
         {
             try
             {
-                var plantDto = _mapper.Map<PlantDto>(uiPlantDto);
-                if (plantDto.ImageFile != null && plantDto.ImageFile.Length > 0)
-                {
-                    plantDto = AddImage(plantDto);
-                }
-                else
-                {
-                    var currentPlant = _plantRepository.GetPlantById(plantDto.Id);
-                    plantDto.ImageFile = currentPlant.Result.ImageFile;
-                    plantDto.ImageUrl = currentPlant.Result.ImageUrl;
-                }
                 var plant = _mapper.Map<Plant>(plantDto);
                 await _plantRepository.UpdateAsync(plant);
-                return CreatedAtAction("GetPlantById", new { id = plantDto.Id });
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -139,42 +126,12 @@ namespace GreenGrassAPI.Controllers
             }
         }
 
-        [HttpPost("AddImage")]
-        private PlantDto AddImage(PlantDto plantDto)
-        {
-            // Utwórz ścieżkę docelową dla zapisu pliku
-            string webRootPath = _webHostEnvironment.WebRootPath;
-            string imagePath = Path.Combine(webRootPath, "PlantImages");
-
-            // Sprawdź, czy folder PlantImages istnieje, jeśli nie, utwórz go
-            if (!Directory.Exists(imagePath))
-            {
-                Directory.CreateDirectory(imagePath);
-            }
-
-            // Wygeneruj nazwę pliku na podstawie oryginalnej nazwy
-            string fileName = Path.GetFileName(plantDto.ImageFile.FileName);
-
-            // Utwórz pełną ścieżkę do zapisu pliku
-            string filePath = Path.Combine(imagePath, fileName);
-
-            // Zapisz plik na serwerze
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                plantDto.ImageFile.CopyTo(fileStream);
-            }
-
-            // Przypisz ścieżkę pliku obrazka do właściwości rośliny
-            plantDto.ImageUrl = Path.Combine("/PlantImages", fileName);
-            return plantDto;
-        }
-
-        [HttpGet("UpdateWateringStatus{plantId}")]
+        [HttpGet("UpdateWateringStatus")]
         public async Task<IActionResult> UpdateWateringStatus(int plantId)
         {
             try
             {
-                await _notificationRepository.UpdateWateringStatusAsync(plantId, DateTime.Now);
+                await _notificationRepository.UpdateWateringStatusAsync(plantId);
                 return Ok();
             }
             catch (Exception ex)
@@ -183,12 +140,12 @@ namespace GreenGrassAPI.Controllers
             }
         }
 
-        [HttpGet("UpdateFertilizingStatus{plantId}")]
+        [HttpGet("UpdateFertilizingStatus")]
         public async Task<IActionResult> UpdateFertilizingStatus(int plantId)
         {
             try
             {
-                await _notificationRepository.UpdateFertilizingStatusAsync(plantId, DateTime.Now);
+                await _notificationRepository.UpdateFertilizingStatusAsync(plantId);
                 return Ok();
             }
             catch (Exception ex)

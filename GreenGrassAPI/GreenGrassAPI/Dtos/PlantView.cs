@@ -69,7 +69,7 @@ namespace GreenGrassAPI.Dtos
         public int? DaysUntilWatering {
             get
             {
-                if (NotificationDto == null || NotificationDto.LastWateringDate.Date == DateTime.Today)
+                if (NotificationDto == null)
                 {
                     return null;
                 }
@@ -83,6 +83,7 @@ namespace GreenGrassAPI.Dtos
 
             }
         }
+
         [NotMapped]
         public string? DaysUntilWateringInfo
         {
@@ -92,17 +93,13 @@ namespace GreenGrassAPI.Dtos
                 {
                     return null;
                 }
-                else if (NotificationDto.LastWateringDate.Date == DateTime.Today)
-                {
-                    return "Podlano dzisiaj.";
-                }
                 else if(DaysUntilWatering > 0)
                 {
                     return $"Należy podlać za: {DaysUntilWatering} dni.";
                 }
-                else
+                else 
                 {
-                    return "Podlej teraz";
+                    return $"Podlej teraz! Opóźnienie {DaysUntilWatering} dni.";
                 }
             }
         }
@@ -112,7 +109,7 @@ namespace GreenGrassAPI.Dtos
         {
             get
             {
-                if (NotificationDto == null || NotificationDto.LastFertilizingDate.Date == DateTime.Today)
+                if (NotificationDto == null)
                 {
                     return null;
                 }
@@ -126,6 +123,7 @@ namespace GreenGrassAPI.Dtos
 
             }
         }
+
         [NotMapped]
         public string? DaysUntilFertilizingInfo
         {
@@ -135,17 +133,13 @@ namespace GreenGrassAPI.Dtos
                 {
                     return null;
                 }
-                else if (NotificationDto.LastFertilizingDate.Date == DateTime.Today)
-                {
-                    return "Nawieziono dzisiaj.";
-                }
                 else if (DaysUntilFertilizing > 0)
                 {
                     return $"Należy nawieżć za: {DaysUntilFertilizing} dni.";
                 }
                 else
                 {
-                    return "Nawieź teraz";
+                    return $"Nawieź teraz! Opóźnienie {DaysUntilFertilizing} dni.";
                 }
             }
         }

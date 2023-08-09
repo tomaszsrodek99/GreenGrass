@@ -19,12 +19,14 @@ namespace GreenGrassAPI.Controllers
     public class NotificationController : Controller
     {
         private readonly INotificationRepository _notificationRepository;
+        private readonly IPlantRepository _plantRepository;
         private readonly IMapper _mapper;
 
-        public NotificationController(INotificationRepository notificationRepository, IMapper mapper)
+        public NotificationController(INotificationRepository notificationRepository, IMapper mapper, IPlantRepository plantRepository)
         {
             _notificationRepository = notificationRepository;
             _mapper = mapper;
+            _plantRepository = plantRepository;
         }
 
         [HttpGet]
@@ -118,13 +120,18 @@ namespace GreenGrassAPI.Controllers
             }
         }
 
-        [HttpPost("Create")]
-        public async Task<ActionResult<Notification>> PostNotification(Notification notification)
+        [HttpPost]
+        [Route("PostNotification")]
+        public async Task<ActionResult<Notification>> PostNotification(NotificationDto notificationDto)
         {
             try
             {
+                var notification = _mapper.Map <Notification>(notificationDto);
                 await _notificationRepository.AddAsync(notification);
-                return notification;
+                var plant = await _plantRepository.GetAsync(notificationDto.PlantId);
+                plant.NotificationId = notification.Id;
+                await _plantRepository.UpdateAsync(plant);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -132,7 +139,8 @@ namespace GreenGrassAPI.Controllers
             }
         }
 
-        [HttpPut("Update")]
+        [HttpPut]
+        [Route("PutNotification")]
         public async Task<IActionResult> PutNotification(NotificationDto notificationDto)
         {
             try
