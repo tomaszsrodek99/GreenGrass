@@ -52,6 +52,11 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(90);
+});
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
@@ -70,13 +75,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseSession();
+
 app.UseStaticFiles();
 
-app.UseCors("AllowUI"); // Use the correct CORS policy name here
+app.UseCors("AllowUI"); 
 
 app.UseRouting();
 
-app.UseAuthentication(); // Corrected "UseAuthorization" to "UseAuthentication"
+app.UseAuthentication(); 
 
 app.UseJwtAuthorization();
 

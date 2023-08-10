@@ -40,7 +40,7 @@ namespace GreenGrassUI.Controllers
                 var responseDto = await response.Content.ReadFromJsonAsync<UserLoginResponseDto>();
                 string token = responseDto.Token;
                 string userId = responseDto.UserId.ToString();
-
+                HttpContext.Session.SetString("UserId", userId);
                 var jwtCookie = new CookieOptions
                 {
                     HttpOnly = true,
@@ -105,9 +105,7 @@ namespace GreenGrassUI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            string jwtToken = Request.Cookies["JWTToken"];
             string userId = Request.Cookies["UserId"];
-            ViewBag.JWTToken = jwtToken;
             ViewBag.UserId = userId;
             return View("Index");
         }

@@ -103,8 +103,8 @@
                                 @Html.ActionLink("Edytuj", "UpdateView", "Plant", new { id = item.Id }, new { @class = "btn btn-primary my-btn", style = "background-color: green;" })
                                 @if (item.NotificationId != null)
                                 {
-                                    @Html.ActionLink("Podlej", "UpdateWatering", "Notification", new { id = item.Id }, new { @class = "btn btn-primary my-btn" })
-                                    @Html.ActionLink("Nawieź", "UpdateFertilizing", "Notification", new { id = item.Id }, new { @class = "btn btn-primary my-btn", style = "background-color: saddlebrown;" })
+                                    @Html.ActionLink("Podlej", "UpdateWatering", "Notification", new { plantId = item.Id }, new { @class = "btn btn-primary my-btn" })
+                                    @Html.ActionLink("Nawieź", "UpdateFertilizing", "Notification", new { plantId = item.Id }, new { @class = "btn btn-primary my-btn", style = "background-color: saddlebrown;" })
                                     <a data-id="@item.Id" data-name="@item.Name" class="btn btn-primary my-btn show-notification-btn">Edytuj powiadomienie</a>
                                 } else
                                 {
@@ -150,5 +150,4 @@ else
             });
         });
     </script>
-
 }

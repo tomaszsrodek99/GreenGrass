@@ -1,4 +1,6 @@
 ﻿using GreenGrassAPI.Dtos;
+using GreenGrassAPI.Models;
+using GreenGrassUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
@@ -31,7 +33,8 @@ namespace GreenGrassUI.Controllers
                 }
                 else
                 {
-                    throw new Exception("Błąd serwera. Spróbuj ponownie później.");
+                    ViewBag.ErrorMessage = "Błąd serwera.";
+                    return View("Error");
                 }
             }
             catch (Exception ex)
@@ -42,18 +45,20 @@ namespace GreenGrassUI.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> UpdateWatering(int id)
+        [HttpGet]
+        public async Task<IActionResult> UpdateWatering(int plantId)
         {
             try
             {
-                HttpResponseMessage notification = await _httpClient.PostAsJsonAsync($"api/Plant/UpdateWateringStatus", id);
+                HttpResponseMessage notification = await _httpClient.GetAsync($"api/Plant/UpdateWateringStatus{plantId}");
                 if (notification.IsSuccessStatusCode)
                 {
                     return RedirectToAction("GetPlants", "Plant");
                 }
                 else
                 {
-                    throw new Exception("Błąd serwera. Spróbuj ponownie później.");
+                    ViewBag.ErrorMessage = "Błąd serwera.";
+                    return View("Error");
                 }
                 
             }
@@ -65,18 +70,20 @@ namespace GreenGrassUI.Controllers
 
         }
         [Authorize]
-        public async Task<IActionResult> UpdateFertilizing(int id)
+        [HttpGet]
+        public async Task<IActionResult> UpdateFertilizing(int plantId)
         {
             try
             {
-                HttpResponseMessage notification = await _httpClient.PostAsJsonAsync($"api/Plant/UpdateFertilizingStatus", id);
+                HttpResponseMessage notification = await _httpClient.GetAsync($"api/Plant/UpdateFertilizingStatus{plantId}");
                 if (notification.IsSuccessStatusCode)
                 {
                     return RedirectToAction("GetPlants", "Plant");
                 }
                 else
                 {
-                    throw new Exception("Błąd serwera. Spróbuj ponownie później.");
+                    ViewBag.ErrorMessage = "Błąd serwera.";
+                    return View("Error");
                 }
             }
             catch (Exception ex)

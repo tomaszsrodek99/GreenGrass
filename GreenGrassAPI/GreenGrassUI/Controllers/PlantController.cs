@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GreenGrassAPI.Dtos;
 using GreenGrassAPI.Models;
+using GreenGrassUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -35,8 +36,9 @@ namespace GreenGrassUI.Controllers
                 }
                 else
                 {
-                    return View("PlantsList", new List<PlantView>());
+                    return View("PlantsList", new List<PlantView>());                
                 }
+                
             }
             catch (Exception ex)
             {

@@ -37,8 +37,7 @@ html {
 
 #notification-list {
     position: absolute;
-    top: 100%;
-    left: 243px;
+    top: calc(100% + 0px);
     z-index: 9999;
     display: none;
     min-width: 200px;
@@ -130,8 +129,23 @@ body {
         height: 200px;
     }
 
+.notification-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+    .notification-icon:hover {
+        cursor: pointer;
+        color: lightgreen;
+    }
+
 .badge-danger {
     background-color: red;
+    position: absolute;
+    top: 0;
+    right: -15px; /* Przesuniêcie, aby by³o bli¿ej ikony dzwonka */
 }
 
 .menu-item {

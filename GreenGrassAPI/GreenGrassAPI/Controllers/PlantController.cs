@@ -126,7 +126,7 @@ namespace GreenGrassAPI.Controllers
             }
         }
 
-        [HttpGet("UpdateWateringStatus")]
+        [HttpGet("UpdateWateringStatus{plantId}")]
         public async Task<IActionResult> UpdateWateringStatus(int plantId)
         {
             try
@@ -140,7 +140,7 @@ namespace GreenGrassAPI.Controllers
             }
         }
 
-        [HttpGet("UpdateFertilizingStatus")]
+        [HttpGet("UpdateFertilizingStatus{plantId}")]
         public async Task<IActionResult> UpdateFertilizingStatus(int plantId)
         {
             try
@@ -162,12 +162,12 @@ namespace GreenGrassAPI.Controllers
 
             foreach (var plant in plants)
             {
-                if (plant.Plant.LastWateringDate != null && plant.Plant.LastWateringDate != DateTime.MinValue && plant.Plant.DaysUntilWatering <= 0)
+                if (plant.Plant.LastWateringDate != null && plant.Plant.DaysUntilWatering <= 0)
                 {
                     notifications.Add(plant);
                 }
 
-                if (plant.Plant.LastFertilizingDate != null && plant.Plant.LastFertilizingDate != DateTime.MinValue && plant.Plant.DaysUntilFertilizing <= 0)
+                if (plant.Plant.LastFertilizingDate != null && plant.Plant.DaysUntilFertilizing <= 0)
                 {
                     notifications.Add(plant);
                 }

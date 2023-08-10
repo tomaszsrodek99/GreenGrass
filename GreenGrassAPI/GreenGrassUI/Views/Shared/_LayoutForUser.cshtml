@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var userId = Context.Session.GetString("UserId");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,8 +25,8 @@
                 </a>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item d-flex align-items-center">
-                        <div>
-                            <a id="notification-link nav-link brand">
+                        <div class="notification-icon">
+                            <a id="notification-link" class="nav-link brand">
                                 <i class="fa-solid fa-bell"></i>Powiadomienia
                             </a>
                             <span id="notification-count" class="badge badge-danger"></span>
@@ -52,5 +56,13 @@
     <script src="~/js/loading.js" asp-append-version="true"></script>
     <script src="~/js/user.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        var userId = '@userId';
+
+        window.onload = function () {
+            initializeNotificationList();
+            checkUserNotifications(userId); 
+        };
+    </script>
 </body>
 </html>
