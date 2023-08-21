@@ -2,3 +2,59 @@
 @{
     ViewData["Title"] = $"{ViewData["PlantName"]}";
 }
+
+
+<button class="btn btn-secondary btn-back" onclick="goBack()">Wstecz</button>
+<h2 class="text-center">
+    @Html.DisplayFor(model => model.Name)
+</h2>
+<div class="row">
+    <div class="col-md-4 plant-image">
+        <img src="@Model.ImageUrl" alt="Zdjęcie" />
+    </div>
+    <div class="col-md-4 plant-description">
+        <h5><i class="fa-solid fa-pencil"></i> @Html.DisplayNameFor(model => model.Description)</h5>
+        <p>@Html.DisplayFor(model => model.Description)</p>
+        <h5><i class="fa-solid fa-pencil"></i> @Html.DisplayNameFor(model => model.CareInstructions)</h5>
+        <p>@Html.DisplayFor(model => model.CareInstructions)</p>
+        <h5>
+            <a class="no-link-style" href="https://pl.wikipedia.org/wiki/@Model.Name" target="_blank">
+                <i class="fa-solid fa-book fa-3x"></i>Ucz się więcej!
+            </a>
+        </h5>
+    </div>
+    <div class="col-md-4">
+        <dl>
+            <dt class="details-label"><i class="fa-solid fa-temperature-three-quarters"></i> Zakres temperatury</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.TemperatureRangeMin)°C - @Html.DisplayFor(model => model.TemperatureRangeMax)°C</dd>
+
+            <dt class="details-label"><i class="fa-solid fa-water"></i> Zakres wilgotności</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.HumidityRangeMin)% - @Html.DisplayFor(model => model.HumidityRangeMax)%</dd>
+
+            <dt class="details-label"><i class="fa-regular fa-sun"></i> @Html.DisplayNameFor(model => model.Lighting)</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.Lighting)</dd>
+
+            <dt class="details-label"><i class="fa-solid fa-mountain"></i> @Html.DisplayNameFor(model => model.SoilType)</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.SoilType)</dd>
+
+            <dt class="details-label"><i class="fa-solid fa-scissors"></i> @Html.DisplayNameFor(model => model.Prunning)</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.Prunning)</dd>
+
+            <dt class="details-label"><i class="fa-solid fa-seedling"></i> @Html.DisplayNameFor(model => model.Bursting)</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.Bursting)</dd>
+
+            <dt class="details-label"><i class="fa-solid fa-whiskey-glass"></i> @Html.DisplayNameFor(model => model.PottedSuggestions)</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.PottedSuggestions)</dd>
+
+            <dt class="details-label"><i class="fa-solid fa-water"></i> @Html.DisplayNameFor(model => model.WateringFrequency)</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.WateringFrequency) dni</dd>
+
+            <dt class="details-label"><i class="fa-solid fa-battery-half"></i> @Html.DisplayNameFor(model => model.FertilizingFrequency)</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.FertilizingFrequency) dni</dd>
+
+            <dt class="details-label"><i class="fa-regular fa-flag"></i> @Html.DisplayNameFor(model => model.RepottingFrequency)</dt>
+            <dd class="details-value">@Html.DisplayFor(model => model.RepottingFrequency) dni</dd>
+        </dl>
+    </div>
+</div>
+

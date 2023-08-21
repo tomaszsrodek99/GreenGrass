@@ -162,12 +162,8 @@ namespace GreenGrassAPI.Controllers
 
             foreach (var plant in plants)
             {
-                if (plant.Plant.LastWateringDate != null && plant.Plant.DaysUntilWatering <= 0)
-                {
-                    notifications.Add(plant);
-                }
-
-                if (plant.Plant.LastFertilizingDate != null && plant.Plant.DaysUntilFertilizing <= 0)
+                if ((plant.Plant.LastWateringDate != null && plant.Plant.NextWateringDate <= DateTime.Now) ||
+                    (plant.Plant.LastFertilizingDate != null && plant.Plant.NextFertilizingDate <= DateTime.Now))
                 {
                     notifications.Add(plant);
                 }

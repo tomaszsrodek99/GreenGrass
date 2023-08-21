@@ -18,7 +18,6 @@ function checkUserNotifications(userId) {
             // Obs³uga b³êdu
         }
     });
-    console.log("checkUserNotifications");
 }
 
 function updateNotificationCount(count, notifications) {
@@ -31,20 +30,28 @@ function updateNotificationCount(count, notifications) {
             notificationList.removeChild(notificationList.firstChild);
         }
         notifications.forEach(function (notification) {
+            console.dir(notification);
             var li = document.createElement('li');
             var plantName = document.createElement('span');
-            plantName.innerText = notification.plant.name;
             li.appendChild(plantName);
-            if (notification.plant.daysUntilWatering <= 0) {
+
+            var nextFertilizingDate = new Date(notification.nextFertilizingDate);
+            var nextWateringDate = new Date(notification.nextWateringDate);
+
+            if (nextWateringDate <= new Date()) {
+                plantName.innerText = notification.plant.name;
                 var wateringNotification = document.createElement('span');
                 wateringNotification.innerText = ' - Konieczne podlewanie!';
                 li.appendChild(wateringNotification);
             }
-            if (notification.plant.daysUntilFertilizing <= 0) {
+
+            if (nextFertilizingDate <= new Date()) {
+                plantName.innerText = notification.plant.name;
                 var fertilizingNotification = document.createElement('span');
                 fertilizingNotification.innerText = ' - Konieczne nawo¿enie!';
                 li.appendChild(fertilizingNotification);
             }
+
             notificationList.appendChild(li);
         });
     } else {

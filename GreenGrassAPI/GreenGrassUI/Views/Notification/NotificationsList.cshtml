@@ -1,0 +1,25 @@
+﻿@model IEnumerable<GreenGrassAPI.Dtos.NotificationDto>
+
+@{
+    ViewData["Title"] = "Moje powiadomienia";
+}
+
+<button class="btn btn-secondary btn-back" onclick="goBack()">Wstecz</button>
+
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 plant-image">
+                <h2 class="text-center">@item.Plant.Name</h2>
+                <p>Data następnego podlewania: @item.NextWateringDate.ToString("dd/MM/yyyy")</p>
+                <p>Data następnego nawożenia: @item.NextFertilizingDate.ToString("dd/MM/yyyy")</p>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Brak powiadomień.</p>
+}

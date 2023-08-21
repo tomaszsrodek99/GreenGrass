@@ -11,13 +11,6 @@ namespace GreenGrassAPI.Dtos
 {
     public class NotificationDto
     {
-        public NotificationDto()
-        {
-            LastFertilizingDate = DateTime.Now;
-            NextWateringDate = DateTime.Now;
-            LastWateringDate = DateTime.Now;
-            NextFertilizingDate = DateTime.Now;
-        }
         public int Id { get; set; }
         [Required(ErrorMessage = "Pole jest wymagane.")]
         public int PlantId { get; set; }

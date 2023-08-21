@@ -20,6 +20,32 @@ namespace GreenGrassUI.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> NotificationsList()
+        {
+            try
+            {
+                HttpResponseMessage notifications = await _httpClient.GetAsync($"api/Plant/CheckNotifications{Request.Cookies["UserId"]}");
+
+                if (notifications.IsSuccessStatusCode)
+                {
+                    var notificationsList = await notifications.Content.ReadFromJsonAsync<IEnumerable<NotificationDto>>();
+                    return View(notificationsList);
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Błąd serwera.";
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddNotification(NotificationDto notificationDto)
@@ -60,7 +86,7 @@ namespace GreenGrassUI.Controllers
                     ViewBag.ErrorMessage = "Błąd serwera.";
                     return View("Error");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -69,6 +95,7 @@ namespace GreenGrassUI.Controllers
             }
 
         }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> UpdateFertilizing(int plantId)
@@ -92,6 +119,29 @@ namespace GreenGrassUI.Controllers
                 return View("Error");
             }
 
+        }
+
+        [Authorize]
+        public async Task<IActionResult> RemoveNotification(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.DeleteAsync($"api/Notification/DeleteNotification{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("GetPlants", "Plant");
+                }
+                else
+                {
+                    throw new Exception("Błąd serwera. Spróbuj ponownie później.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
         }
     }
 }

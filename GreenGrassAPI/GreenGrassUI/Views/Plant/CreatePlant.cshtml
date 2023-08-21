@@ -19,12 +19,14 @@
             <input asp-for="Name" class="form-control" type="text"/>
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-
-        <div class="form-group">
-            <label asp-for="DateAdded" class="control-label"></label>
+        @if (ViewContext.RouteData.Values["action"] as string == "UpdateView")
+        {
+            <div class="form-group">
+                <label asp-for="DateAdded" class="control-label"></label>
             <input type="date" asp-for="DateAdded" class="form-control" />
             <span asp-validation-for="DateAdded" class="text-danger"></span>
         </div>
+        }
 
         <div class="form-group">
             <label asp-for="Description" class="control-label"></label>

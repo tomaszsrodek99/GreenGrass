@@ -82,7 +82,9 @@
                         @if (item.NotificationId == null)
                         {
                             <p>Podlewać co: @(Html.DisplayFor(modelItem => item.WateringFrequency)) dni.</p>
-                        } else {
+                        }
+                        else
+                        {
                         @Html.DisplayFor(modelItem => item.DaysUntilWateringInfo)
                         }
                     </td>
@@ -106,6 +108,7 @@
                                     @Html.ActionLink("Podlej", "UpdateWatering", "Notification", new { plantId = item.Id }, new { @class = "btn btn-primary my-btn" })
                                     @Html.ActionLink("Nawieź", "UpdateFertilizing", "Notification", new { plantId = item.Id }, new { @class = "btn btn-primary my-btn", style = "background-color: saddlebrown;" })
                                     <a data-id="@item.Id" data-name="@item.Name" class="btn btn-primary my-btn show-notification-btn">Edytuj powiadomienie</a>
+                                    @Html.ActionLink("Usuń powiadomienie", "RemoveNotification", "Notification", new { id = item.NotificationId }, new { @class = "btn btn-danger my-btn", onclick = "return confirm('Czy na pewno chcesz usunąć powiadomienie?');" })
                                 } else
                                 {
                                     <a data-id="@item.Id" data-name="@item.Name" class="btn btn-primary my-btn show-notification-btn">Dodaj powiadomienie</a>

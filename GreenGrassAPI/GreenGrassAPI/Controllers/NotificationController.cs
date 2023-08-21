@@ -165,7 +165,7 @@ namespace GreenGrassAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("Delete{id}")]
+        [HttpDelete("DeleteNotification{id}")]
         public async Task<IActionResult> DeleteNotification(int id)
         {
             try
