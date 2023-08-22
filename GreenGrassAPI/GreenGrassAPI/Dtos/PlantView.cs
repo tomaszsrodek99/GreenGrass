@@ -97,7 +97,10 @@ namespace GreenGrassAPI.Dtos
                 {
                     return $"Należy podlać za: {DaysUntilWatering} dni.";
                 }
-                else 
+                else if(DaysUntilWatering == 0)
+                {
+                    return $"Podlej teraz!";
+                } else
                 {
                     return $"Podlej teraz! Opóźnienie {DaysUntilWatering} dni.";
                 }
@@ -136,6 +139,9 @@ namespace GreenGrassAPI.Dtos
                 else if (DaysUntilFertilizing > 0)
                 {
                     return $"Należy nawieżć za: {DaysUntilFertilizing} dni.";
+                }else if(DaysUntilFertilizing == 0)
+                {
+                    return $"Nawieź teraz!";
                 }
                 else
                 {

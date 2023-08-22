@@ -205,3 +205,80 @@ body {
 .btn-back {
     margin-right: 15px;
 }
+
+/*Notification list*/
+.notification-square img {
+    border-radius: 15px;
+    width: 70%;
+    height: 70%;
+    margin-bottom: 15px;
+}
+
+.notification-square {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 10px;
+    margin: 15px;
+    background-color: aliceblue;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+    .notification-square.expired {
+        border-color: red;
+    }
+
+.notification-content {
+    text-align: right;
+}
+
+    .notification-content p {
+        margin-top: 5px;
+    }
+
+.details-of-notification {
+    padding: 5px;
+}
+
+.notification-menu {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.menu-icon {
+    cursor: pointer;
+}
+
+.options-menu {
+    position: absolute;
+    top: 100%;
+    right: -10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+    .options-menu span {
+        display: block;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+.delete-option {
+    color: red;
+}
+
+.edit-option {
+    color: blue;
+}
+
+.notification-menu:hover .options-menu {
+    display: block;
+    color: lawngreen;
+}

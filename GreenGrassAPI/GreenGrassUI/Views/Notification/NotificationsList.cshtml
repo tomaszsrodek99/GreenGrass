@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GreenGrassAPI.Dtos.NotificationDto>
+﻿@model IEnumerable<GreenGrassAPI.Dtos.PlantView>
 
 @{
     ViewData["Title"] = "Moje powiadomienia";
@@ -11,15 +11,65 @@
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 plant-image">
-                <h2 class="text-center">@item.Plant.Name</h2>
-                <p>Data następnego podlewania: @item.NextWateringDate.ToString("dd/MM/yyyy")</p>
-                <p>Data następnego nawożenia: @item.NextFertilizingDate.ToString("dd/MM/yyyy")</p>
+            <div class="col-md-2 notification-square @((item.DaysUntilWatering <= 0) ? "expired" : "")">
+                <div class="notification-menu">
+                    <i class="fa-solid fa-ellipsis-v menu-icon"></i>
+                    <div class="options-menu">
+                        <a class="no-link-style" href="@Url.Action("RemoveNotification", "Notification", new { id = item.NotificationId })" onclick="return confirm('Czy na pewno chcesz usunąć powiadomienie?');">
+                            <span class="delete-option"><i class="fa-solid fa-trash"></i> Usuń powiadomienie</span>
+                        </a>
+                        <a data-id="@item.Id" data-name="@item.Name" class="show-notification-btn edit-option no-link-style">
+                            <span class="edit-option"><i class="fa-solid fa-edit"></i> Edytuj powiadomienie</span>
+                        </a>
+                    </div>
+                </div>
+                <img src="@item.ImageUrl" />
+                <a class="no-link-style" href="@Url.Action("DetailsOfPlants", "Plant", new { id = item.Id })">
+                    <h4 class="text-center">@item.Name</h4>
+                </a>            
+                <div class="details-of-notification">
+                    <p>
+                        <i class="fa-solid fa-water"></i>
+                        @item.DaysUntilWateringInfo
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-battery-half"></i>
+                        @item.DaysUntilFertilizingInfo
+                    </p>
+                </div>
+            </div>
+            <div id="notificationOverlay" class="notification-overlay" style="display: none;">
+                <div class="text-center notification-content">
+                    <div id="notificationContainer">
+                        @await Html.PartialAsync("NotificationView", new GreenGrassAPI.Dtos.NotificationDto())
+                    </div>
+                </div>
             </div>
         }
     </div>
+
+
 }
 else
 {
     <p>Brak powiadomień.</p>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".show-notification-btn").click(function () {
+                var plantId = $(this).data("id");
+                var plantName = $(this).data("name");
+
+                $("#notificationOverlay").show();
+                $("#notificationPlantName").text("Powiadomienie - " + plantName);
+                $("#notificationDtoPlantId").val(plantId);
+            });
+
+            $("#closeNotificationBtn").click(function () {
+                $("#notificationOverlay").hide();
+            });
+        });
+    </script>
 }

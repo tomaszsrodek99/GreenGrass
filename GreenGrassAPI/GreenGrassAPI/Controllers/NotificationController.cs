@@ -127,10 +127,17 @@ namespace GreenGrassAPI.Controllers
             try
             {
                 var notification = _mapper.Map <Notification>(notificationDto);
+                notification.LastFertilizingDate = DateTime.Now;
+                notification.LastWateringDate = DateTime.Now;
+
                 await _notificationRepository.AddAsync(notification);
+
                 var plant = await _plantRepository.GetAsync(notificationDto.PlantId);
+
                 plant.NotificationId = notification.Id;
+
                 await _plantRepository.UpdateAsync(plant);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -171,10 +178,16 @@ namespace GreenGrassAPI.Controllers
             try
             {
                 var notification = await _notificationRepository.GetAsync(id);
+                var plant = await _plantRepository.GetAsync(notification.PlantId);
+
+                plant.NotificationId = null;
+                await _plantRepository.UpdateAsync(plant);
+
                 if (notification == null)
                 {
                     return NotFound("Brak powiadomienia o podanym ID.");
                 }
+
                 await _notificationRepository.DeleteAsync(id);
                 return NoContent();
             }

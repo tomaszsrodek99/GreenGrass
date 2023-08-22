@@ -5,6 +5,7 @@
 
 
 <button class="btn btn-secondary btn-back" onclick="goBack()">Wstecz</button>
+@Html.ActionLink("Edytuj", "UpdateView", "Plant", new { id = Model.Id }, new { @class = "btn btn-primary my-btn", style = "background-color: green;" })
 <h2 class="text-center">
     @Html.DisplayFor(model => model.Name)
 </h2>

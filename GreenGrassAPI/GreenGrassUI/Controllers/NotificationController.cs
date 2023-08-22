@@ -25,12 +25,16 @@ namespace GreenGrassUI.Controllers
         {
             try
             {
-                HttpResponseMessage notifications = await _httpClient.GetAsync($"api/Plant/CheckNotifications{Request.Cookies["UserId"]}");
-
-                if (notifications.IsSuccessStatusCode)
+                HttpResponseMessage response = await _httpClient.GetAsync($"api/Plant/GetUsersPlants{Request.Cookies["UserId"]}");
+                if (response.IsSuccessStatusCode)
                 {
-                    var notificationsList = await notifications.Content.ReadFromJsonAsync<IEnumerable<NotificationDto>>();
-                    return View(notificationsList);
+                    var notificationsList = await response.Content.ReadFromJsonAsync<IEnumerable<PlantView>>();
+                    var sortedNotifications = notificationsList
+                        .OrderBy(notification => notification.NextWateringDate < notification.NextFertilizingDate ? 0 : 1)
+                        .ThenBy(notification => notification.NextWateringDate)
+                        .ToList();
+
+                    return View(sortedNotifications);
                 }
                 else
                 {
