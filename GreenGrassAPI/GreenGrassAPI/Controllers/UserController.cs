@@ -13,6 +13,8 @@ using GreenGrassAPI.Repositories;
 using GreenGrassAPI.Dtos;
 using GreenGrassAPI.Models;
 using GreenGrassAPI.Interfaces;
+using System.Security.Cryptography;
+using Newtonsoft.Json.Linq;
 
 namespace GreenGrassAPI.Controllers
 {
@@ -151,6 +153,11 @@ namespace GreenGrassAPI.Controllers
                 }
 
                 string token = _repository.GenerateToken(user);
+
+                var refreshToken = GenerateRefreshToken();
+
+                SetRefreshToken(refreshToken, user.Id);
+
                 var responseDto = new UserLoginResponseDto() { Token = token, UserId = user.Id };
                 return Ok(responseDto);
             }
@@ -158,6 +165,62 @@ namespace GreenGrassAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("RefreshToken")]
+        public async Task<ActionResult<string>> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            var userDto = GetUser(int.Parse(Request.Cookies["UserId"]));
+            var user = _mapper.Map<User>(userDto);
+
+            if (!user.RefreshToken.Equals(refreshToken))
+            {
+                return Unauthorized("Nieprawidłowy token.");
+            }
+            else if(user.TokenExpires < DateTime.Now)
+            {
+                return Unauthorized("Token wygasł.");
+            }
+
+            string token = _repository.GenerateToken(user);
+
+            var newRefreshToken = GenerateRefreshToken();
+            SetRefreshToken(newRefreshToken, user.Id);
+
+            var responseDto = new UserLoginResponseDto() { Token = token, UserId = user.Id };
+            return Ok(responseDto);
+        }
+
+        private RefreshToken GenerateRefreshToken()
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expires = DateTime.Now.AddMinutes(60),
+                Created = DateTime.Now
+            };
+            return refreshToken;
+        }
+
+        private async void SetRefreshToken(RefreshToken refreshToken, int id)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = refreshToken.Expires
+            };
+            Response.Cookies.Append("RefreshToken", refreshToken.Token, cookieOptions);
+
+            var user = await _repository.GetAsync(id);
+
+            user.RefreshToken = refreshToken.Token;
+            user.TokenCreated = refreshToken.Created;
+            user.TokenExpires = refreshToken.Expires;
+
+            _repository.UpdateAsync(user);
         }
 
         [HttpGet("UserExists")]

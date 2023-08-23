@@ -64,3 +64,21 @@ function updateNotificationCount(count, notifications) {
         notificationList.appendChild(li);
     }
 }
+
+async function refreshToken() {
+    try {
+        await axios.post('/api/User/RefreshToken');
+    } catch (error) {
+        console.error('B³¹d podczas odœwie¿ania tokenu:', error);
+    }
+}
+
+function startTokenRefreshInterval() {
+    console.log("Odliczamy");
+    setInterval(refreshToken, 1800000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    startTokenRefreshInterval();
+});
+

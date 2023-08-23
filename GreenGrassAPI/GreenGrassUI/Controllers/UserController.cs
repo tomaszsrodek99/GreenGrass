@@ -40,7 +40,9 @@ namespace GreenGrassUI.Controllers
                 var responseDto = await response.Content.ReadFromJsonAsync<UserLoginResponseDto>();
                 string token = responseDto.Token;
                 string userId = responseDto.UserId.ToString();
+
                 HttpContext.Session.SetString("UserId", userId);
+
                 var jwtCookie = new CookieOptions
                 {
                     HttpOnly = true,
@@ -58,6 +60,7 @@ namespace GreenGrassUI.Controllers
                     Expires = DateTime.UtcNow.AddMinutes(60)
                 };
                 Response.Cookies.Append("UserId", userId, userIdCookie);
+
                 return RedirectToAction("Index");
             }
             else
@@ -117,6 +120,7 @@ namespace GreenGrassUI.Controllers
 
             Response.Cookies.Delete("JWTToken");
             Response.Cookies.Delete("UserId");
+            Response.Cookies.Delete("RefreshToken");
 
             return RedirectToAction("LoginView");
         }

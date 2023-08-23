@@ -45,7 +45,6 @@ namespace GreenGrassAPI.Repositories
                 Email = request.Email,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                Role = "User"
             };
 
             _context.Add(user);
@@ -74,15 +73,14 @@ namespace GreenGrassAPI.Repositories
             var claims = new List<Claim>
             {
                 new Claim("UserId", user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Email, user.Email)
             };
 
             var tokenOptions = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
                 _config["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(90),
+                expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: credentials);
 
             var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
