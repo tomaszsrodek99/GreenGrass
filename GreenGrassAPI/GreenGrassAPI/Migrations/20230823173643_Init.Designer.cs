@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GreenGrassAPI.Migrations
 {
     [DbContext(typeof(GreenGrassDbContext))]
-    [Migration("20230729152519_Init")]
+    [Migration("20230823173643_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,18 +64,15 @@ namespace GreenGrassAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Bursting")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CareInstructions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FertilizingFrequency")
@@ -87,9 +84,8 @@ namespace GreenGrassAPI.Migrations
                     b.Property<int>("HumidityRangeMin")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("ImageUrl")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Lighting")
                         .IsRequired()
@@ -103,18 +99,15 @@ namespace GreenGrassAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PottedSuggestions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Prunning")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RepottingFrequency")
                         .HasColumnType("int");
 
                     b.Property<string>("SoilType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TemperatureRangeMax")

@@ -60,6 +60,9 @@ namespace GreenGrassUI.Controllers
         {
             try
             {
+                plantDto.UserId = int.Parse(Request.Cookies["UserId"]);
+                plantDto.DateAdded = DateTime.Now;
+
                 if (plantDto.ImageFile != null)
                     plantDto = AddImage(plantDto);
 
@@ -79,24 +82,12 @@ namespace GreenGrassUI.Controllers
         }
         private PlantDto AddImage(PlantDto plantDto)
         {
-            string webRootPath = _webHostEnvironment.WebRootPath;
-            string imagePath = Path.Combine(webRootPath, "PlantImages");
-
-            if (!Directory.Exists(imagePath))
+            using (var memoryStream = new MemoryStream())
             {
-                Directory.CreateDirectory(imagePath);
+                plantDto.ImageFile.CopyTo(memoryStream);
+                plantDto.ImageUrl = memoryStream.ToArray();
             }
 
-            string fileName = Path.GetFileName(plantDto.ImageFile.FileName);
-
-            string filePath = Path.Combine(imagePath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                plantDto.ImageFile.CopyTo(fileStream);
-            }
-
-            plantDto.ImageUrl = Path.Combine("/PlantImages", fileName);
             return plantDto;
         }
 

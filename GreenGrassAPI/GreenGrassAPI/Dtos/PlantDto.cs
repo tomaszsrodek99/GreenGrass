@@ -23,7 +23,8 @@ namespace GreenGrassAPI.Dtos
         public DateTime DateAdded { get; set; }
 
         [Display(Name = "Zdjęcie")]
-        public string? ImageUrl { get; set; }
+        [Column(TypeName = "varbinary(max)")]
+        public byte[]? ImageUrl { get; set; }
         [JsonIgnore]
         public IFormFile? ImageFile { get; set; }
 

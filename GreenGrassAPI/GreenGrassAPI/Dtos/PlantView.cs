@@ -16,7 +16,8 @@ namespace GreenGrassAPI.Dtos
         public DateTime DateAdded { get; set; }
 
         [Display(Name = "Zdjęcie")]
-        public string? ImageUrl { get; set; }
+        [Column(TypeName = "varbinary(max)")]
+        public byte[]? ImageUrl { get; set; }
 
         [Display(Name = "Zakres temperatury min.")]
         public int TemperatureRangeMin { get; set; }
@@ -102,7 +103,7 @@ namespace GreenGrassAPI.Dtos
                     return $"Podlej teraz!";
                 } else
                 {
-                    return $"Podlej teraz! Opóźnienie {DaysUntilWatering} dni.";
+                    return $"Podlej teraz! Opóźnienie {Math.Abs((decimal)DaysUntilWatering)} dni.";
                 }
             }
         }
@@ -145,7 +146,7 @@ namespace GreenGrassAPI.Dtos
                 }
                 else
                 {
-                    return $"Nawieź teraz! Opóźnienie {DaysUntilFertilizing} dni.";
+                    return $"Nawieź teraz! Opóźnienie {Math.Abs((decimal)DaysUntilFertilizing)} dni.";
                 }
             }
         }

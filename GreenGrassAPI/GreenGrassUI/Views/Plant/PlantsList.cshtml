@@ -58,9 +58,9 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        @if ((item.ImageUrl).Any())
                         {
-                            <img src="@Url.Content(item.ImageUrl)" class="image-thumbnail" />
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.ImageUrl)" class="image-thumbnail"/>
                         }
                     </td>
                     <td>

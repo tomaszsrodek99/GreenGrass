@@ -82,8 +82,8 @@ namespace GreenGrassAPI.Migrations
                     b.Property<int>("HumidityRangeMin")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("ImageUrl")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Lighting")
                         .IsRequired()

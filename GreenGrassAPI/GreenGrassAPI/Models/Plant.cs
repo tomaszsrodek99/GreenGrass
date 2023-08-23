@@ -16,7 +16,8 @@ namespace GreenGrassAPI.Models
         public string Name { get; set; } = null!;
         [Required]
         public DateTime DateAdded { get; set; }
-        public string? ImageUrl { get; set; }
+        [Column(TypeName = "varbinary(max)")]
+        public byte[]? ImageUrl { get; set; }
         public string? Description { get; set; }
         public string? CareInstructions { get; set; }
         //PARAMETRY KWIATKA XD
