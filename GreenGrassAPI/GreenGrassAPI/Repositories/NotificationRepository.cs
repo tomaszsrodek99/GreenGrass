@@ -18,10 +18,9 @@ namespace GreenGrassAPI.Repositories
         }
         public async Task UpdateWateringStatusAsync(int plantId)
         {
-            var notification = await _context.Notifications.FirstOrDefaultAsync(n => n.PlantId == plantId);
-            var period = (notification.NextWateringDate - notification.LastWateringDate).TotalDays;
+            var notification = await _context.Notifications.FirstOrDefaultAsync(n => n.PlantId == plantId);           
 
-            notification.NextWateringDate = DateTime.Now.AddDays(period);
+            notification.NextWateringDate = DateTime.Now.AddDays(notification.WateringPeriod);
             notification.LastWateringDate = DateTime.Now;
                 
             await _context.SaveChangesAsync();
@@ -30,9 +29,8 @@ namespace GreenGrassAPI.Repositories
         public async Task UpdateFertilizingStatusAsync(int plantId)
         {
             var notification = await _context.Notifications.FirstOrDefaultAsync(n => n.PlantId == plantId);
-            var period = (notification.NextFertilizingDate - notification.LastFertilizingDate).TotalDays;
 
-            notification.NextFertilizingDate = DateTime.Now.AddDays(period);
+            notification.NextFertilizingDate = DateTime.Now.AddDays(notification.FertilizingPeriod);
             notification.LastFertilizingDate = DateTime.Now;
               
             await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<GreenGrassAPI.Dtos.PlantView>
+@using Newtonsoft.Json
 @namespace GreenGrassUI.Views.Plant
 @{
     ViewData["Title"] = "Moje rośliny";
@@ -110,7 +111,7 @@
                                     @Html.ActionLink("Usuń powiadomienie", "RemoveNotification", "Notification", new { id = item.NotificationId }, new { @class = "btn btn-danger my-btn", onclick = "return confirm('Czy na pewno chcesz usunąć powiadomienie?');" })
                                 } else
                                 {
-                                    <a data-id="@item.Id" data-name="@item.Name" class="btn btn-primary my-btn show-notification-btn">Dodaj powiadomienie</a>
+                                    <a class="btn btn-primary my-btn show-notification-btn" onclick="handleItemClick(@JsonConvert.SerializeObject(item))">Dodaj powiadomienie</a>
                                 }
                                 @Html.ActionLink("Usuń", "RemovePlant", "Plant", new { id = item.Id }, new { @class = "btn btn-danger", onclick = "return confirm('Czy na pewno chcesz usunąć roślinę?');" })
                             </div>
@@ -137,19 +138,15 @@ else
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            $(".show-notification-btn").click(function () {
-                var plantId = $(this).data("id");
-                var plantName = $(this).data("name");
+        function handleItemClick(itemJson) {
+            var jsonString = JSON.stringify(itemJson);
 
-                $("#notificationOverlay").show();
-                $("#notificationPlantName").text("Powiadomienie - " + plantName);
-                $("#notificationDtoPlantId").val(plantId);
-            });
+            var item = JSON.parse(jsonString);
+            document.getElementById("plantId").value = item.Id;
 
-            $("#closeNotificationBtn").click(function () {
-                $("#notificationOverlay").hide();
-            });
-        });
+            $("#notificationOverlay").show();
+            $("#notificationPlantName").text("Powiadomienie - " + item.Name);
+        }
+
     </script>
 }

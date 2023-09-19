@@ -1,24 +1,25 @@
 ﻿@model GreenGrassAPI.Dtos.NotificationDto
 
 <h2 id="notificationPlantName">Powiadomienie</h2>
-<form asp-action="AddNotification" asp-controller="Notification" method="post" class="my-form">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @Html.AntiForgeryToken()
 
-    <input id="notificationDtoPlantId" asp-for="PlantId" hidden />
-    <input type="date" asp-for="LastWateringDate" hidden />
-    <input type="date" asp-for="LastFertilizingDate" hidden />
+<form asp-action="AddNotification" asp-controller="Notification" method="post" class="my-form">
+    @Html.AntiForgeryToken();
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input id="plantId" hidden asp-for="PlantId" />
+    <input id="Id" hidden asp-for="Id" />
+    <input id="lastWateringDate" hidden />
+    <input id="lastFertilizingDate" hidden />
 
     <div class="form-group">
         <label asp-for="NextWateringDate" class="control-label"></label>
-        <input type="date" asp-for="NextWateringDate" class="form-control" min="@DateTime.Today.ToString("yyyy-MM-dd")"
+        <input type="date" asp-for="NextWateringDate" class="form-control" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
                data-val="true" data-val-futuredate="Data nie może być wcześniejsza niż dzisiejsza." />
         <span asp-validation-for="NextWateringDate" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="NextFertilizingDate" class="control-label"></label>
-        <input type="date" asp-for="NextFertilizingDate" class="form-control" min="@DateTime.Today.ToString("yyyy-MM-dd")"
+        <input type="date" asp-for="NextFertilizingDate" class="form-control" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
                data-val="true" data-val-futuredate="Data nie może być wcześniejsza niż dzisiejsza." />
         <span asp-validation-for="NextFertilizingDate" class="text-danger"></span>
     </div>
@@ -35,5 +36,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
 }

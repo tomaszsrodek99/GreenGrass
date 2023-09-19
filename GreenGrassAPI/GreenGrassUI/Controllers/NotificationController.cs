@@ -56,16 +56,32 @@ namespace GreenGrassUI.Controllers
         {
             try
             {
-                HttpResponseMessage notification = await _httpClient.PostAsJsonAsync($"api/Notification/PostNotification", notificationDto);
-                if (notification.IsSuccessStatusCode)
+                if(notificationDto.Id == 0)
                 {
-                    return RedirectToAction("GetPlants", "Plant");
+                    HttpResponseMessage notification = await _httpClient.PostAsJsonAsync($"api/Notification/PostNotification", notificationDto);
+                    if (notification.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("GetPlants", "Plant");
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Błąd serwera.";
+                        return View("Error");
+                    }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Błąd serwera.";
-                    return View("Error");
-                }
+                    HttpResponseMessage notification = await _httpClient.PutAsJsonAsync($"api/Notification/PutNotification", notificationDto);
+                    if (notification.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("NotificationsList", "Notification");
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Błąd serwera.";
+                        return View("Error");
+                    }
+                }                                         
             }
             catch (Exception ex)
             {

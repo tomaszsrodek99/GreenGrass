@@ -129,6 +129,8 @@ namespace GreenGrassAPI.Controllers
                 var notification = _mapper.Map <Notification>(notificationDto);
                 notification.LastFertilizingDate = DateTime.Now;
                 notification.LastWateringDate = DateTime.Now;
+                notification.FertilizingPeriod = (int)(notification.NextFertilizingDate.Date - notification.LastFertilizingDate.Date).TotalDays;
+                notification.WateringPeriod = (int)(notification.NextWateringDate.Date - notification.LastWateringDate.Date).TotalDays;
 
                 await _notificationRepository.AddAsync(notification);
 
@@ -162,7 +164,12 @@ namespace GreenGrassAPI.Controllers
                     return BadRequest("Zmiana pola PlantId jest niedozwolona.");
                 }
 
-                _mapper.Map(notificationDto, notification);
+                notification.NextFertilizingDate = notificationDto.NextFertilizingDate;
+                notification.NextWateringDate = notificationDto.NextWateringDate;
+
+                notification.WateringPeriod = (int)(notificationDto.NextWateringDate - notification.LastWateringDate.Date).TotalDays;
+                notification.FertilizingPeriod = (int)(notificationDto.NextFertilizingDate - notification.LastFertilizingDate.Date).TotalDays;
+
                 await _notificationRepository.UpdateAsync(notification);
             }
             catch (Exception ex)

@@ -16,7 +16,9 @@ namespace GreenGrassAPI.Models
         public Plant? Plant { get; set; }
         public DateTime LastWateringDate { get; set; }
         public DateTime NextWateringDate { get; set; }
+        public int WateringPeriod { get; set; }
         public DateTime LastFertilizingDate { get; set; }
         public DateTime NextFertilizingDate { get; set; }
+        public int FertilizingPeriod { get; set; }
     }
 }

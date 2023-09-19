@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<GreenGrassAPI.Dtos.PlantView>
+@using Newtonsoft.Json
 
 @{
     ViewData["Title"] = "Moje powiadomienia";
@@ -18,13 +19,13 @@
                         <a class="no-link-style" href="@Url.Action("RemoveNotification", "Notification", new { id = item.NotificationId })" onclick="return confirm('Czy na pewno chcesz usunąć powiadomienie?');">
                             <span class="delete-option"><i class="fa-solid fa-trash"></i> Usuń powiadomienie</span>
                         </a>
-                        <a data-id="@item.Id" data-name="@item.Name" class="show-notification-btn edit-option no-link-style">
+                        <a class="show-notification-btn edit-option no-link-style" onclick="handleItemClick(@JsonConvert.SerializeObject(item))">
                             <span class="edit-option"><i class="fa-solid fa-edit"></i> Edytuj powiadomienie</span>
                         </a>
                     </div>
                 </div>
                 <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.ImageUrl)" alt="zdjęcie" />
-                <a class="no-link-style" href="@Url.Action("DetailsOfPlants", "Plant", new { id = item.Id })">
+                <a class="no-link-style" href="@Url.Action("DetailsOfPlant", "Plant", new { id = item.Id })">
                     <h4 class="text-center">@item.Name</h4>
                 </a>            
                 <div class="details-of-notification">
@@ -57,19 +58,19 @@ else
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            $(".show-notification-btn").click(function () {
-                var plantId = $(this).data("id");
-                var plantName = $(this).data("name");
+        function handleItemClick(itemJson) {
+            var jsonString = JSON.stringify(itemJson); 
 
-                $("#notificationOverlay").show();
-                $("#notificationPlantName").text("Powiadomienie - " + plantName);
-                $("#notificationDtoPlantId").val(plantId);
-            });
+            var item = JSON.parse(jsonString);
+            console.log(item);
+            document.getElementById("plantId").value = item.Id;         
+            document.getElementById("Id").value = item.NotificationId;         
+            document.getElementById("lastWateringDate").value = item.LastWateringDate;
+            document.getElementById("lastFertilizingDate").value = item.LastFertilizingDate;
 
-            $("#closeNotificationBtn").click(function () {
-                $("#notificationOverlay").hide();
-            });
-        });
+            $("#notificationOverlay").show();
+            $("#notificationPlantName").text("Powiadomienie - " + item.Name);
+        }
+        
     </script>
 }

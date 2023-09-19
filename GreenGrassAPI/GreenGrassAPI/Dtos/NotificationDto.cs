@@ -24,10 +24,12 @@ namespace GreenGrassAPI.Dtos
         public DateTime NextWateringDate { get; set; }
         [Display(Name = "Poprzednio nawożono")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public int WateringPeriod { get; set; }
         public DateTime LastFertilizingDate { get; set; }
         [Display(Name = "Należy nawieżć dnia")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         [Required(ErrorMessage = "Pole jest wymagane.")]
         public DateTime NextFertilizingDate { get; set; }
+        public int FertilizingPeriod { get; set; }
     }
 }
