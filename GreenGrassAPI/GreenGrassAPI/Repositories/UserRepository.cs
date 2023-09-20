@@ -24,14 +24,22 @@ namespace GreenGrassAPI.Repositories
             _config = configuration;
         }
 
-        public async Task<User?> GetUserByLogin(string request)
+        public async Task<User> GetUserByLogin(string request)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == request);
+        }
+        public async Task<User> GetUserByNick(string request)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Nickname == request);
+        }
+        public async Task<User> CheckNickname(string request)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Nickname == request);
         }
 
         public async Task<ActionResult<User?>> Register(UserRegisterRequestDto request)
         {
-            if (_context.Users.Any(u => u.Email == request.Email))
+            if (_context.Users.Any(u => u.Email == request.Email || u.Nickname == request.Nickname))
             {
                 return null;
             }
@@ -43,6 +51,7 @@ namespace GreenGrassAPI.Repositories
             var user = new User
             {
                 Email = request.Email,
+                Nickname = request.Nickname,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
             };

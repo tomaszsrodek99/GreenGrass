@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenGrassAPI", "GreenGrassAPI\GreenGrassAPI.csproj", "{13AB8BC8-2936-4DA2-A582-824002CF8799}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenGrassAPI", "GreenGrassAPI\GreenGrassAPI.csproj", "{13AB8BC8-2936-4DA2-A582-824002CF8799}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenGrassUI", "GreenGrassUI\GreenGrassUI.csproj", "{94A45812-E6F9-4391-9E49-F9AE6F195844}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenGrassUI", "GreenGrassUI\GreenGrassUI.csproj", "{94A45812-E6F9-4391-9E49-F9AE6F195844}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,33 @@
+﻿@model GreenGrassAPI.Models.User
+
+<button class="btn btn-secondary btn-back" onclick="goBack()">Wstecz</button>
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="offset-4 col-4 text-center">
+            <h2>Wyniki wyszukiwania znajomych</h2>
+            <table id="searchTable" class="table sortable table-striped table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nick</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Nickname</td>
+                        <td>
+                            @Html.ActionLink("Zaproś", "Invite", "User", new { userId = Model.Id }, new { @class = "btn btn-primary my-btn" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <p>Brak wyników wyszukiwania.</p>
+}
+

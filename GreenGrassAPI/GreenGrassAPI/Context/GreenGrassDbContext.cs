@@ -11,6 +11,8 @@ namespace GreenGrassAPI.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Plant> Plants { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserFriends> Friends { get; set; }
+        public DbSet<FriendRequest> FriendRequest { get; set; }
         public GreenGrassDbContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

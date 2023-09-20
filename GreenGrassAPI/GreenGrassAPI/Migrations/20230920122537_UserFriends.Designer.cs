@@ -4,6 +4,7 @@ using GreenGrassAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GreenGrassAPI.Migrations
 {
     [DbContext(typeof(GreenGrassDbContext))]
-    partial class GreenGrassDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230920122537_UserFriends")]
+    partial class UserFriends
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,41 +23,6 @@ namespace GreenGrassAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("GreenGrassAPI.Models.FriendRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("DateSent")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAccepted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("FriendRequest");
-                });
 
             modelBuilder.Entity("GreenGrassAPI.Models.Notification", b =>
                 {
@@ -155,9 +122,6 @@ namespace GreenGrassAPI.Migrations
                     b.Property<int>("TemperatureRangeMin")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserFriendsId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -165,8 +129,6 @@ namespace GreenGrassAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserFriendsId");
 
                     b.HasIndex("UserId");
 
@@ -207,49 +169,14 @@ namespace GreenGrassAPI.Migrations
                     b.Property<DateTime>("TokenExpires")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("GreenGrassAPI.Models.UserFriends", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FriendNickname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserNickname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Friends");
-                });
-
-            modelBuilder.Entity("GreenGrassAPI.Models.FriendRequest", b =>
-                {
-                    b.HasOne("GreenGrassAPI.Models.User", null)
-                        .WithMany("ReceivedFriendRequests")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("GreenGrassAPI.Models.User", null)
-                        .WithMany("SentFriendRequests")
-                        .HasForeignKey("UserId1");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("GreenGrassAPI.Models.Notification", b =>
@@ -265,10 +192,6 @@ namespace GreenGrassAPI.Migrations
 
             modelBuilder.Entity("GreenGrassAPI.Models.Plant", b =>
                 {
-                    b.HasOne("GreenGrassAPI.Models.UserFriends", null)
-                        .WithMany("Plants")
-                        .HasForeignKey("UserFriendsId");
-
                     b.HasOne("GreenGrassAPI.Models.User", "User")
                         .WithMany("Plants")
                         .HasForeignKey("UserId")
@@ -278,13 +201,11 @@ namespace GreenGrassAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GreenGrassAPI.Models.UserFriends", b =>
+            modelBuilder.Entity("GreenGrassAPI.Models.User", b =>
                 {
                     b.HasOne("GreenGrassAPI.Models.User", null)
                         .WithMany("Friends")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("GreenGrassAPI.Models.Plant", b =>
@@ -296,15 +217,6 @@ namespace GreenGrassAPI.Migrations
                 {
                     b.Navigation("Friends");
 
-                    b.Navigation("Plants");
-
-                    b.Navigation("ReceivedFriendRequests");
-
-                    b.Navigation("SentFriendRequests");
-                });
-
-            modelBuilder.Entity("GreenGrassAPI.Models.UserFriends", b =>
-                {
                     b.Navigation("Plants");
                 });
 #pragma warning restore 612, 618

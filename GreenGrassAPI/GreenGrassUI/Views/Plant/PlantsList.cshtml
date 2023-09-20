@@ -11,7 +11,7 @@
     <span class="input-group-text">
         <i class="fa-solid fa-magnifying-glass"></i>
     </span>
-    <input class="form-control search-bar" type="text" id="searchInput" onkeyup="searchPlantByName()" placeholder="Wyszukaj..">
+    <input class="form-control search-bar" type="text" id="searchInput" onkeyup="searchByName()" placeholder="Wyszukaj..">
 </div>
 <br />
 <a href="@Url.Action("CreateView", "Plant")" class="btn btn-primary" style="margin-bottom: 15px;">Dodaj nową roślinę</a>
@@ -122,8 +122,8 @@
             }
         </tbody>
     </table>
-    <div id="notificationOverlay" class="notification-overlay" style="display: none;">
-        <div class="text-center notification-content">
+    <div id="notificationOverlay" class="partial-overlay" style="display: none;">
+        <div class="text-center partial-content">
             <div id="notificationContainer">
                 @await Html.PartialAsync("NotificationView", new GreenGrassAPI.Dtos.NotificationDto())
             </div>

@@ -23,6 +23,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+builder.Services.AddScoped<IFriendsRepository, FriendRepository>();
 
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 

@@ -13,5 +13,9 @@ namespace GreenGrassAPI.Dtos
         [Required(ErrorMessage = "Pole jest wymagane."), Compare("Password", ErrorMessage = "Hasła nie są identyczne.")]
         [Display(Name = "Potwierdż hasło")]
         public string ConfirmPassword { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Pole jest wymagane.")]
+        [Display(Name = "Nick")]
+        [MinLength(2, ErrorMessage = "Minimalna długość to 2 znaków.")]
+        public string Nickname { get; set; } = string.Empty;
     }
 }

@@ -39,8 +39,8 @@
                     </p>
                 </div>
             </div>
-            <div id="notificationOverlay" class="notification-overlay" style="display: none;">
-                <div class="text-center notification-content">
+            <div id="notificationOverlay" class="partial-overlay" style="display: none;">
+                <div class="text-center partial-content">
                     <div id="notificationContainer">
                         @await Html.PartialAsync("NotificationView", new GreenGrassAPI.Dtos.NotificationDto())
                     </div>

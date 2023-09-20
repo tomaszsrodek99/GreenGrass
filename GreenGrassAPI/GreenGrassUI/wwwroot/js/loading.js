@@ -42,7 +42,7 @@ function hideModal() {
     notificationContainer.style.display = 'none';
 }
 
-function searchPlantByName() {
+function searchByName() {
     var input, filter, table, tr, td, i, txtValue;
     input = document.getElementById("searchInput");
     filter = input.value.toUpperCase();
@@ -60,4 +60,5 @@ function searchPlantByName() {
         }
     }
 }
+
 

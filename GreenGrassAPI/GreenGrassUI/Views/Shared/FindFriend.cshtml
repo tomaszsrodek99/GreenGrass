@@ -1,0 +1,10 @@
+﻿@model GreenGrassAPI.Models.User
+
+<h2>Wyszukaj znajomego</h2>
+<form asp-action="SearchFriends" asp-controller="User" method="get" class="my-form">
+    <div class="form-group">
+        <input asp-for="Nickname" class="form-control" placeholder="Wyszukaj znajomego po nicku" />
+        <span asp-validation-for="Nickname" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Szukaj</button>
+</form>

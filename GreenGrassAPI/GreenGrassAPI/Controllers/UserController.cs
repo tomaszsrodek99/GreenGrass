@@ -23,12 +23,16 @@ namespace GreenGrassAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _repository;
+        private readonly IFriendsRepository _friendsRepository;
+        private readonly IPlantRepository _plantsRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(IMapper mapper, IUserRepository userRepository)
+        public UsersController(IMapper mapper, IUserRepository userRepository, IFriendsRepository friendsRepository, IPlantRepository plantsRepository)
         {
             _mapper = mapper;
             _repository = userRepository;
+            _friendsRepository = friendsRepository;
+            _plantsRepository = plantsRepository;
         }
 
         [HttpGet]
@@ -124,7 +128,7 @@ namespace GreenGrassAPI.Controllers
             {
                 var user = await _repository.Register(request);
                 if (user == null)
-                    return BadRequest("Użytkownik o podanym adresie email już istnieje.");
+                    return BadRequest("Użytkownik o podanym adresie email już istnieje lub nick nie jest już dostępny.");
                 else
                     return Ok("Poprawnie zarejestrowano użytkownika!");
             }
@@ -158,7 +162,7 @@ namespace GreenGrassAPI.Controllers
 
                 SetRefreshToken(refreshToken, user.Id);
 
-                var responseDto = new UserLoginResponseDto() { Token = token, UserId = user.Id };
+                var responseDto = new UserLoginResponseDto() { Token = token, UserId = user.Id, Nickname = user.Nickname };
                 return Ok(responseDto);
             }
             catch (Exception ex)
@@ -178,7 +182,7 @@ namespace GreenGrassAPI.Controllers
             {
                 return Unauthorized("Nieprawidłowy token.");
             }
-            else if(user.TokenExpires < DateTime.Now)
+            else if (user.TokenExpires < DateTime.Now)
             {
                 return Unauthorized("Token wygasł.");
             }
@@ -229,5 +233,44 @@ namespace GreenGrassAPI.Controllers
             var user = await _repository.GetUserByLogin(email);
             return user != null;
         }
+
+        [HttpGet("NickExists")]
+        public async Task<ActionResult<bool>> CheckNickDuplicate(string nickname)
+        {
+            var user = await _repository.CheckNickname(nickname);
+            return user != null;
+        }
+
+        [HttpGet("GetFriends{userId}")]
+        public async Task<ActionResult<List<UserFriends>>> GetFriends(int userId)
+        {
+            try
+            {
+                var friends = await _friendsRepository.GetAllAsync();
+                var myFriends = friends.Where(x => x.UserId == userId);
+                foreach (var friend in myFriends)
+                {
+                    friend.Plants = (ICollection<Plant>)await _plantsRepository.GetAllUsersPlants(userId);
+                }
+
+                return friends;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("SearchByNick{nickname}")]
+        public async Task<ActionResult<User>> SearchByNick(string nickname)
+        {
+            var user = await _repository.GetUserByNick(nickname);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            return user;
+        }
     }
 }
+
